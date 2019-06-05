@@ -88,6 +88,7 @@ namespace DMAssist.Forms
             config.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
             config.Save();
 
+            program.DCConManager.Reload();
             program.TwitchChatManager.AddActivity(new ActivityChangeChannel(config.Value.TwitchChannelName));
             program.WebServerManager.Start();
         }

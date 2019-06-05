@@ -69,6 +69,8 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="CrashReport.cs" />
+    <Compile Include="DCCons\DCCon.cs" />
+    <Compile Include="DCCons\DCConManager.cs" />
     <Compile Include="Forms\ConfigGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -166,8 +168,6 @@
     <Content Include="Resources\NotifyIcon.png" />
     <Content Include="Resources\Icon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DCConManager\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

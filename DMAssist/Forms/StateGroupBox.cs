@@ -14,7 +14,8 @@ namespace DMAssist.Forms
     {
         private Label ChatClientStateLabel;
         private Label ChatChannelStateLabel;
-        private Label WebServerStatelabel;
+        private Label WebServerStateLabel;
+        private Label DCConStateLabel;
 
         public StateGroupBox()
         {
@@ -24,7 +25,8 @@ namespace DMAssist.Forms
 
             this.Controls.Add(this.ChatClientStateLabel = new Label());
             this.Controls.Add(this.ChatChannelStateLabel = new Label());
-            this.Controls.Add(this.WebServerStatelabel = new Label());
+            this.Controls.Add(this.WebServerStateLabel = new Label());
+            this.Controls.Add(this.DCConStateLabel = new Label());
 
             this.ResumeLayout(false);
 
@@ -93,7 +95,10 @@ namespace DMAssist.Forms
                 this.ChatChannelStateLabel.Text = $"채팅 채널 : {this.ToStringState(tcm.JoinState)}";
 
                 var wsm = program.WebServerManager;
-                this.WebServerStatelabel.Text = $"웹 서버 : {this.ToStringState(wsm.State)}";
+                this.WebServerStateLabel.Text = $"웹 서버 : {this.ToStringState(wsm.State)}";
+
+                var dcm = program.DCConManager;
+                this.DCConStateLabel.Text = $"디씨콘 개수 : {dcm.Values.Length}";
             }
 
         }

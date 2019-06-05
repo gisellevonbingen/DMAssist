@@ -1,4 +1,5 @@
-﻿using DMAssist.Forms;
+﻿using DMAssist.DCCons;
+using DMAssist.Forms;
 using DMAssist.Properties;
 using DMAssist.Resources;
 using DMAssist.Themes;
@@ -32,9 +33,10 @@ namespace DMAssist
         }
 
         public ConfigurationManager Configuration { get; }
+        public ThemeManager ThemeManager { get; }
+        public DCConManager DCConManager { get; }
         public FontManager FontManager { get; }
         public NotifyIconManager NotifyIconManager { get; }
-        public ThemeManager ThemeManager { get; }
         public TwitchChatManager TwitchChatManager { get; }
         public WebServerManager WebServerManager { get; }
         public MainForm MainForm { get; private set; }
@@ -53,9 +55,10 @@ namespace DMAssist
             Application.SetCompatibleTextRenderingDefault(false);
 
             this.Configuration = new ConfigurationManager(Path.Combine(Application.StartupPath, "Config.json"));
+            this.ThemeManager = new ThemeManager();
+            this.DCConManager = new DCConManager();
             this.FontManager = new FontManager();
             this.NotifyIconManager = new NotifyIconManager(this);
-            this.ThemeManager = new ThemeManager();
             this.TwitchChatManager = new TwitchChatManager();
             this.WebServerManager = new WebServerManager();
             this.MainForm = null;
@@ -69,6 +72,8 @@ namespace DMAssist
             {
                 this.Configuration.Load();
                 this.ThemeManager.LoadDirectory(Application.StartupPath + "/themes");
+
+                this.DCConManager.Reload();
 
                 this.TwitchChatManager.Start();
                 this.TwitchChatManager.AddActivity(new ActivityChangeChannel(this.Configuration.Value.TwitchChannelName));
