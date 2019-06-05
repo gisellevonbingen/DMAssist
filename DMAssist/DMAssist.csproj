@@ -66,6 +66,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="CrashReport.cs" />
     <Compile Include="Forms\CrashReportForm.cs">
       <SubType>Form</SubType>
@@ -88,11 +90,6 @@
     <Compile Include="Forms\ThemeItem.cs" />
     <Compile Include="Forms\ThemesGroupBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Resources\FontFormat.cs" />
     <Compile Include="Resources\FontManager.cs" />
@@ -141,6 +138,9 @@
     <Compile Include="Utils\ExplorerUtils.cs" />
     <Compile Include="Utils\PathUtils.cs" />
     <Compile Include="WebServers\ChatComponent.cs" />
+    <Compile Include="WebServers\ChatComponentImage.cs" />
+    <Compile Include="WebServers\ChatComponentText.cs" />
+    <Compile Include="WebServers\Emote.cs" />
     <Compile Include="WebServers\MessageBase.cs" />
     <Compile Include="WebServers\MessageChat.cs" />
     <Compile Include="WebServers\MessageConfigNotify.cs" />
@@ -155,10 +155,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

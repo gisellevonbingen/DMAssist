@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DMAssist.WebServers
 {
-    public class ChatComponent
+    public abstract class ChatComponent
     {
         public ChatComponent()
         {

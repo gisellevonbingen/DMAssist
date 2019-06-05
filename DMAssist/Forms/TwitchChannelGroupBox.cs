@@ -22,7 +22,7 @@ namespace DMAssist.Forms
             this.Text = "트위치 채널";
 
             var channelNameTextBox = this.ChannelNameTextBox = new TextBox();
-            channelNameTextBox.Text = Program.Instance.Settings.TwitchChannel;
+            channelNameTextBox.Text = Program.Instance.Configuration.Value.TwitchChannelName;
             this.Controls.Add(channelNameTextBox);
 
             var applyButton = this.ApplyButton = new Button();
@@ -74,12 +74,12 @@ namespace DMAssist.Forms
 
         private void OnApplyButtonClick(object sender, EventArgs e)
         {
-            var settings = Program.Instance.Settings;
-            settings.TwitchChannel = this.ChannelNameTextBox.Text;
-            settings.Save();
+            var config = Program.Instance.Configuration;
+            config.Value.TwitchChannelName = this.ChannelNameTextBox.Text;
+            config.Save();
 
             var tcm = Program.Instance.TwitchChatManager;
-            tcm.AddActivity(new ActivityChangeChannel(settings.TwitchChannel));
+            tcm.AddActivity(new ActivityChangeChannel(config.Value.TwitchChannelName));
         }
 
         protected override Dictionary<Control, Rectangle> GetPreferredBounds(Rectangle layoutBounds)

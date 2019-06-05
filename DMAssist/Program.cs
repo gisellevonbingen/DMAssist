@@ -5,6 +5,7 @@ using DMAssist.Themes;
 using DMAssist.Twitchs;
 using DMAssist.WebServers;
 using Giselle.Commons;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,12 +31,13 @@ namespace DMAssist
 
         }
 
+        public MainForm MainForm { get; private set; }
         public FontManager FontManager { get; }
         public NotifyIconManager NotifyIconManager { get; }
         public ThemeManager ThemeManager { get; }
         public TwitchChatManager TwitchChatManager { get; }
         public WebServerManager WebServerManager { get; }
-        public MainForm MainForm { get; private set; }
+        public ConfigurationManager Configuration { get; }
 
         public bool Disposed { get; private set; }
 
@@ -46,12 +48,11 @@ namespace DMAssist
 
         public Program()
         {
-            this.RefreshConfig();
-
             Console.CancelKeyPress += this.OnCancelKeyPress;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            this.Configuration = new ConfigurationManager(Path.Combine(Application.StartupPath, "Config.json"));
             this.FontManager = new FontManager();
             this.NotifyIconManager = new NotifyIconManager(this);
             this.ThemeManager = new ThemeManager();
@@ -62,40 +63,15 @@ namespace DMAssist
             this.Disposed = false;
         }
 
-        internal Settings Settings
-        {
-            get
-            {
-                return Properties.Settings.Default;
-            }
-
-        }
-
-        private void RefreshConfig()
-        {
-            var config = Properties.Settings.Default;
-
-            if (string.IsNullOrWhiteSpace(config.TwitchChannel) == true)
-            {
-                config.TwitchChannel = "daengmin2";
-            }
-
-            if (config.WebSocketPort == 0)
-            {
-                config.WebSocketPort = 6974;
-            }
-
-            config.Save();
-        }
-
         private void Run()
         {
             try
             {
+                this.Configuration.Load();
                 this.ThemeManager.LoadDirectory(Application.StartupPath + "/themes");
 
                 this.TwitchChatManager.Start();
-                this.TwitchChatManager.AddActivity(new ActivityChangeChannel(this.Settings.TwitchChannel));
+                this.TwitchChatManager.AddActivity(new ActivityChangeChannel(this.Configuration.Value.TwitchChannelName));
 
                 this.WebServerManager.Start();
 

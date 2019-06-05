@@ -21,7 +21,6 @@ namespace DMAssist.WebServers
 
         private WebSocketServer Server;
 
-
         public WebServerManager()
         {
             this.StateLock = new object();
@@ -32,23 +31,90 @@ namespace DMAssist.WebServers
             this.Codec.Register("chat", () => new MessageChat());
 
             this.Server = null;
-
         }
+
+        private List<Emote> ParseTwitchEmotes(TwitchChat.Commands.Emote[] tagEmotes)
+        {
+            var emotes = new List<Emote>();
+
+            foreach (var emote in tagEmotes)
+            {
+                foreach (var index in emote.Indices)
+                {
+                    var startIndex = index.StartIndex;
+                    var count = index.LastIndex - index.StartIndex + 1;
+
+                    emotes.Add(new Emote(startIndex, count, emote.EmoteId));
+                }
+
+            }
+
+            emotes.Sort((o1, o2) => o1.StartIndex.CompareTo(o2.StartIndex));
+
+            return emotes;
+        }
+
+        private string GetEmoteURL(string id, string size)
+        {
+            return $"http://static-cdn.jtvnw.net/emoticons/v1/{id}/{size}";
+        }
+
+        private List<ChatComponent> SplitTwitchEmotes(CommandPrivateMessage command)
+        {
+            var message = command.Message;
+            var components = new List<ChatComponent>();
+
+            var endIndex = 0;
+            var emotes = this.ParseTwitchEmotes(command.Tags.Emotes);
+
+            foreach (var emote in emotes)
+            {
+                var leftCount = emote.StartIndex - endIndex;
+                var left = message.Substring(endIndex, leftCount);
+
+                if (string.IsNullOrWhiteSpace(left) == false)
+                {
+                    components.Add(new ChatComponentText() { Text = left });
+                }
+
+                var emoteText = message.Substring(emote.StartIndex, emote.Count);
+                components.Add(new ChatComponentImage() { Type = "Twitch", URL = this.GetEmoteURL(emote.Id, "1.0"), Alt = emoteText });
+
+                endIndex = emote.StartIndex + emote.Count;
+            }
+
+            {
+                var right = message.Substring(endIndex);
+
+                if (string.IsNullOrWhiteSpace(right) == false)
+                {
+                    components.Add(new ChatComponentText() { Text = right });
+                }
+
+            }
+
+            return components;
+        }
+
+        private List<ChatComponent> ParseMessage(CommandPrivateMessage command)
+        {
+            var components = this.SplitTwitchEmotes(command);
+
+            return components;
+        }
+
 
         private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessageEventArgs e)
         {
             var command = e.Command;
-            var text = command.Message;
             var tags = command.Tags;
-
-            foreach (var emote in tags.Emotes)
-            {
-                Console.WriteLine(emote);
-            }
+            var components = this.ParseMessage(e.Command);
 
             var message = new MessageChat();
+            message.Badges.AddRange(tags.Badeges);
             message.DisplayName = tags.DisplayName;
             message.Color = tags.Color;
+            message.Components.AddRange(components);
 
             var writeToken = this.Codec.Write(message);
 
@@ -67,11 +133,11 @@ namespace DMAssist.WebServers
 
                 this.State = WebServerState.Starting;
                 var program = Program.Instance;
-                var settings = program.Settings;
+                var settings = program.Configuration;
 
                 try
                 {
-                    var server = this.Server = new WebSocketServer(settings.WebSocketPort);
+                    var server = this.Server = new WebSocketServer(settings.Value.WebSocketPort);
                     server.Start();
                     server.AddWebSocketService(Path, () =>
                     {

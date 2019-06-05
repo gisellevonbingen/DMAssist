@@ -23,7 +23,7 @@ namespace DMAssist.Forms
 
             var webSocketServerControl = this.WebSocketServerControl = new LabeledTextBox();
             webSocketServerControl.Label.Text = "WebSocket 포트";
-            webSocketServerControl.TextBox.Text = Program.Instance.Settings.WebSocketPort.ToString();
+            webSocketServerControl.TextBox.Text = Program.Instance.Configuration.Value.WebSocketPort.ToString();
             this.Controls.Add(webSocketServerControl);
 
             var applyButton = this.ApplyButton = new Button();
@@ -52,8 +52,8 @@ namespace DMAssist.Forms
 
         private void OnApplyButtonClick(object sender, EventArgs e)
         {
-            var settings = Program.Instance.Settings;
-            settings.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
+            var settings = Program.Instance.Configuration;
+            settings.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
             settings.Save();
         }
 
