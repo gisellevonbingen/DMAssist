@@ -31,6 +31,12 @@ namespace DMAssist.WebServers
             token["Bages"] = new JArray(this.Badges.Select(b => b.ToString()));
             token["DisplayName"] = this.DisplayName;
             token["Color"] = this.Color;
+            token["Components"] = new JArray(this.Components.Select(c =>
+            {
+                var t = new JObject();
+                c.Write(t);
+                return t;
+            }));
         }
 
     }
