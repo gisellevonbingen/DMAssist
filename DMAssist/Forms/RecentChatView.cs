@@ -49,7 +49,7 @@ namespace DMAssist.Forms
 
         public void Add(PrivateMessageEventArgs e)
         {
-            var message = e.Message;
+            var message = e.Command;
             this.Add(message.Tags.DisplayName, message.Message);
         }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchChat.Commands;
 using WebSocketSharp.Server;
 
 namespace DMAssist.WebServers
@@ -36,15 +37,20 @@ namespace DMAssist.WebServers
 
         private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessageEventArgs e)
         {
-            var message = e.Message;
-            var text = message.Message;
-            var tags = message.Tags;
+            var command = e.Command;
+            var text = command.Message;
+            var tags = command.Tags;
 
-            var messageChat = new MessageChat();
-            messageChat.DisplayName = tags.DisplayName;
-            messageChat.Color = tags.Color;
+            foreach (var emote in tags.Emotes)
+            {
+                Console.WriteLine(emote);
+            }
 
-            var writeToken = this.Codec.Write(messageChat);
+            var message = new MessageChat();
+            message.DisplayName = tags.DisplayName;
+            message.Color = tags.Color;
+
+            var writeToken = this.Codec.Write(message);
 
             foreach (var session in this.GetSessions())
             {

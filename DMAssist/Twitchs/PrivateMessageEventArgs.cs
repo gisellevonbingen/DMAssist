@@ -9,11 +9,11 @@ namespace DMAssist.Twitchs
 {
     public class PrivateMessageEventArgs : EventArgs
     {
-        public CommandPrivateMessage Message { get; }
+        public CommandPrivateMessage Command { get; }
 
-        public PrivateMessageEventArgs(CommandPrivateMessage message)
+        public PrivateMessageEventArgs(CommandPrivateMessage command)
         {
-            this.Message = message;
+            this.Command = command;
         }
 
     }
