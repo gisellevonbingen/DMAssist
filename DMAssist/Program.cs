@@ -31,13 +31,13 @@ namespace DMAssist
 
         }
 
-        public MainForm MainForm { get; private set; }
+        public ConfigurationManager Configuration { get; }
         public FontManager FontManager { get; }
         public NotifyIconManager NotifyIconManager { get; }
         public ThemeManager ThemeManager { get; }
         public TwitchChatManager TwitchChatManager { get; }
         public WebServerManager WebServerManager { get; }
-        public ConfigurationManager Configuration { get; }
+        public MainForm MainForm { get; private set; }
 
         public bool Disposed { get; private set; }
 
