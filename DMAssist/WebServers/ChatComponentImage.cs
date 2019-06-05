@@ -10,18 +10,18 @@ namespace DMAssist.WebServers
     {
         public string URL { get; set; }
         public string Type { get; set; }
-        public string Alt { get; set; }
+        public string Title { get; set; }
 
         public ChatComponentImage()
         {
             this.URL = null;
             this.Type = null;
-            this.Alt = null;
+            this.Title = null;
         }
 
         public override string ToString()
         {
-            return $"{this.Type}:{this.Alt}";
+            return $"{this.Type}:{this.Title}";
         }
 
     }

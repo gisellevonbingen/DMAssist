@@ -14,9 +14,9 @@ namespace DMAssist.Forms
     {
         private Icon _Icon;
 
-        private TwitchChannelGroupBox TwitchGroupBox;
+        private StateGroupBox StateGroupBox;
+        private ConfigGroupBox ConfigGroupBox;
         private ThemesGroupBox ThemesGroupBox;
-        private NetworkGroupBox NetworkGroupBox;
         private RecentChatView RecentChatView;
 
         public MainForm()
@@ -27,14 +27,14 @@ namespace DMAssist.Forms
             this.Icon = this._Icon = Icon.FromHandle(Properties.Resources.Icon.GetHicon());
             this.MaximizeBox = false;
 
-            var twitchGroupBox = this.TwitchGroupBox = new TwitchChannelGroupBox();
-            this.Controls.Add(twitchGroupBox);
+            var stateGroupBox = this.StateGroupBox = new StateGroupBox();
+            this.Controls.Add(stateGroupBox);
+
+            var configGroupBox = this.ConfigGroupBox = new ConfigGroupBox();
+            this.Controls.Add(configGroupBox);
 
             var themesGroupBox = this.ThemesGroupBox = new ThemesGroupBox();
             this.Controls.Add(themesGroupBox);
-
-            var networkGroupBox = this.NetworkGroupBox = new NetworkGroupBox();
-            this.Controls.Add(networkGroupBox);
 
             var recentChatView = this.RecentChatView = new RecentChatView();
             this.Controls.Add(recentChatView);
@@ -92,22 +92,22 @@ namespace DMAssist.Forms
         {
             var map = base.GetPreferredBounds(layoutBounds);
 
-            var proposedSize = new Size(330, 106);
+            var proposedSize = new Size(348, 106);
 
-            var twitchGroupBox = this.TwitchGroupBox;
-            var twitchGroupBoxBounds = map[twitchGroupBox] = new Rectangle(layoutBounds.Location, twitchGroupBox.GetPreferredSize(proposedSize));
+            var configGroupBox = this.StateGroupBox;
+            var configGroupBoxBounds = map[configGroupBox] = new Rectangle(layoutBounds.Location, configGroupBox.GetPreferredSize(proposedSize));
+
+            var stateGroupBox = this.ConfigGroupBox;
+            var stateGroupBoxLocation = new Point(configGroupBoxBounds.Left, configGroupBoxBounds.Bottom + 5);
+            var stateGroupBoxBounds = map[stateGroupBox] = new Rectangle(stateGroupBoxLocation, stateGroupBox.GetPreferredSize(proposedSize));
 
             var themesGroupBox = this.ThemesGroupBox;
-            var themesGroupBoxLocation = new Point(twitchGroupBoxBounds.Left, twitchGroupBoxBounds.Bottom + 10);
+            var themesGroupBoxLocation = new Point(stateGroupBoxBounds.Left, stateGroupBoxBounds.Bottom + 5);
             var themesGroupBoxBounds = map[themesGroupBox] = new Rectangle(themesGroupBoxLocation, themesGroupBox.GetPreferredSize(proposedSize));
 
-            var networkGroupBox = this.NetworkGroupBox;
-            var networkGroupBoxLocation = new Point(themesGroupBoxBounds.Left, themesGroupBoxBounds.Bottom + 10);
-            var networkGroupBounds = map[networkGroupBox] = new Rectangle(networkGroupBoxLocation, networkGroupBox.GetPreferredSize(proposedSize));
-
             var recentChatView = this.RecentChatView;
-            var recentChatViewLeft = twitchGroupBoxBounds.Right + 10;
-            map[recentChatView] = Rectangle.FromLTRB(recentChatViewLeft, twitchGroupBoxBounds.Top, layoutBounds.Right, twitchGroupBoxBounds.Top + 347);
+            var recentChatViewLeft = configGroupBoxBounds.Right + 10;
+            map[recentChatView] = Rectangle.FromLTRB(recentChatViewLeft, configGroupBoxBounds.Top, layoutBounds.Right, configGroupBoxBounds.Top + 347);
 
             return map;
         }

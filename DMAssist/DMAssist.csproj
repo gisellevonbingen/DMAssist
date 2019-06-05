@@ -69,6 +69,9 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="CrashReport.cs" />
+    <Compile Include="Forms\ConfigGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\CrashReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +90,9 @@
     <Compile Include="Forms\RecentChatView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\StateGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\ThemeItem.cs" />
     <Compile Include="Forms\ThemesGroupBox.cs">
       <SubType>Component</SubType>
@@ -96,9 +102,6 @@
     <Compile Include="Resources\FontMatchFormat.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NetworkGroupBox.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="NotifyIconManager.cs" />
     <Compile Include="Forms\OptimizedControl.cs">
@@ -122,9 +125,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TwitchChannelGroupBox.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeConfigChangedEventArgs.cs" />
@@ -166,6 +166,8 @@
     <Content Include="Resources\NotifyIcon.png" />
     <Content Include="Resources\Icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DCConManager\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
