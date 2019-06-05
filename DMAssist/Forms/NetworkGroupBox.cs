@@ -52,9 +52,13 @@ namespace DMAssist.Forms
 
         private void OnApplyButtonClick(object sender, EventArgs e)
         {
-            var settings = Program.Instance.Configuration;
-            settings.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
-            settings.Save();
+            var program = Program.Instance;
+            var config = Program.Instance.Configuration;
+            config.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
+            config.Save();
+
+            program.WebServerManager.Start();
+            
         }
 
         protected override Dictionary<Control, Rectangle> GetPreferredBounds(Rectangle layoutBounds)
