@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMAssist", "DMAssist\DMAssist.csproj", "{6937BFB5-0C48-4181-AAA4-BF212D6ABF01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{367054DD-7C6B-4EAF-BC4E-97C76CF15479}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6937BFB5-0C48-4181-AAA4-BF212D6ABF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6937BFB5-0C48-4181-AAA4-BF212D6ABF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6937BFB5-0C48-4181-AAA4-BF212D6ABF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6937BFB5-0C48-4181-AAA4-BF212D6ABF01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367054DD-7C6B-4EAF-BC4E-97C76CF15479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367054DD-7C6B-4EAF-BC4E-97C76CF15479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367054DD-7C6B-4EAF-BC4E-97C76CF15479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367054DD-7C6B-4EAF-BC4E-97C76CF15479}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {638E294C-41A9-43C7-9A51-49D6B9069AD9}
+	EndGlobalSection
+EndGlobal
