@@ -75,7 +75,6 @@ namespace DMAssist.Themes
                 }
 
                 watcher = new FileSystemWatcher(directoryPath);
-                //watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite;
                 watcher.Created += this.OnConfigFileChanged;
                 watcher.Changed += this.OnConfigFileChanged;
                 watcher.EnableRaisingEvents = true;
