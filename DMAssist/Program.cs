@@ -1,4 +1,5 @@
-﻿using DMAssist.DCCons;
+﻿using DMAssist.Badges;
+using DMAssist.DCCons;
 using DMAssist.Forms;
 using DMAssist.Properties;
 using DMAssist.Resources;
@@ -35,6 +36,7 @@ namespace DMAssist
         public ConfigurationManager Configuration { get; }
         public ThemeManager ThemeManager { get; }
         public DCConManager DCConManager { get; }
+        public BadgeManager BadgeManager { get; }
         public FontManager FontManager { get; }
         public NotifyIconManager NotifyIconManager { get; }
         public TwitchChatManager TwitchChatManager { get; }
@@ -58,6 +60,7 @@ namespace DMAssist
             this.Configuration = new ConfigurationManager(Path.Combine(Application.StartupPath, "Config.json"));
             this.ThemeManager = new ThemeManager();
             this.DCConManager = new DCConManager();
+            this.BadgeManager = new BadgeManager();
             this.FontManager = new FontManager();
             this.NotifyIconManager = new NotifyIconManager(this);
             this.TwitchChatManager = new TwitchChatManager();
@@ -76,6 +79,7 @@ namespace DMAssist
                 this.ThemeManager.LoadDirectory(Application.StartupPath + "/themes");
 
                 this.DCConManager.Reload();
+                this.BadgeManager.Reload();
 
                 this.TwitchChatManager.Start();
                 this.TwitchChatManager.AddActivity(new ActivityChangeChannel(this.Configuration.Value.TwitchChannelName));

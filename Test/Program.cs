@@ -1,36 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 
 namespace Test
 {
-    static class Program
+    public static class Program
     {
-        /// <summary>
-        /// 해당 애플리케이션의 주 진입점입니다.
-        /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            Timer timer = new Timer();
-            timer.Interval = 50;
-            timer.Tick += Timer_Tick;
-            timer.Start();
-
-            while (true)
-            {
-                Application.DoEvents();
-                Console.WriteLine("B");
-
-                Console.Read();
-
-            }
-
+            var url = "https://static-cdn.jtvnw.net/badges/v1/bd444ec6-8f34-4bf9-91f4-af1e3428d80f/3";
+            var uri = new Uri(url);
+            Console.WriteLine(uri.LocalPath);
         }
 
         private static void Timer_Tick(object sender, EventArgs e)

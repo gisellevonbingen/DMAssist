@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DMAssist.Badges;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TwitchChat.Commands;
 
 namespace DMAssist.Twitchs
 {
@@ -28,7 +28,7 @@ namespace DMAssist.Twitchs
 
         public void Write(JToken token)
         {
-            token["Bages"] = new JArray(this.Badges.Select(b => b.ToString()));
+            token["Bages"] = new JArray(this.Badges.Select(b => b.Path));
             token["DisplayName"] = this.DisplayName;
             token["Color"] = this.Color;
             token["Components"] = new JArray(this.Components.Select(c =>

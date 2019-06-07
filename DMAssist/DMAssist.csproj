@@ -67,6 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Badges\Badge.cs" />
+    <Compile Include="Badges\BadgeManager.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="CrashReport.cs" />

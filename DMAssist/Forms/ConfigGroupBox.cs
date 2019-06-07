@@ -14,7 +14,6 @@ namespace DMAssist.Forms
     {
         private LabeledTextBox TwitchChannelNameControl;
         private LabeledTextBox DCConURLControl;
-        private LabeledTextBox TwitchEmoteSizeControl;
         private LabeledTextBox WebSocketServerControl;
 
         private Button ApplyButton;
@@ -35,11 +34,6 @@ namespace DMAssist.Forms
             dcConURLControl.Label.Text = "디씨콘 주소";
             dcConURLControl.TextBox.Text = value.DCConURL;
             this.Controls.Add(dcConURLControl);
-
-            var twitchEmoteSizeControl = this.TwitchEmoteSizeControl = new LabeledTextBox();
-            twitchEmoteSizeControl.Label.Text = "이모티콘 크기";
-            twitchEmoteSizeControl.TextBox.Text = value.TwitchEmoteSize;
-            this.Controls.Add(twitchEmoteSizeControl);
 
             var webSocketServerControl = this.WebSocketServerControl = new LabeledTextBox();
             webSocketServerControl.Label.Text = "WebSocket 포트";
@@ -84,11 +78,11 @@ namespace DMAssist.Forms
             var config = program.Configuration;
             config.Value.TwitchChannelName = this.TwitchChannelNameControl.TextBox.Text;
             config.Value.DCConURL = this.DCConURLControl.TextBox.Text;
-            config.Value.TwitchEmoteSize = this.TwitchEmoteSizeControl.TextBox.Text;
             config.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
             config.Save();
 
             program.DCConManager.Reload();
+            program.BadgeManager.Reload();
             program.TwitchChatManager.AddActivity(new ActivityChangeChannel(config.Value.TwitchChannelName));
             program.WebServerManager.Start();
         }

@@ -24,6 +24,12 @@ namespace DMAssist.Twitchs
             this.HandlePrivateMessage?.Invoke(this, message);
         }
 
+        private IEnumerable<Badges.Badge> SelectBadges(Badge[] badges)
+        {
+            var bm = Program.Instance.BadgeManager;
+            return badges.Select(b => bm.Get(b.Name, b.Version)).Where(b => b != null);
+        }
+
         private void OnPrivateMessage(object sender, PrivateMessageEventArgs e)
         {
             var command = e.Command;
@@ -38,7 +44,7 @@ namespace DMAssist.Twitchs
             }
 
             var message = new PrivateMessage();
-            message.Badges.AddRange(tags.Badeges);
+            message.Badges.AddRange(this.SelectBadges(tags.Badeges));
             message.DisplayName = tags.DisplayName;
             message.Components.AddRange(components);
             message.Color = color;
@@ -67,9 +73,9 @@ namespace DMAssist.Twitchs
             return emotes;
         }
 
-        private string GetEmoteURL(string id, string size)
+        private string GetEmoteURL(string id)
         {
-            return $"http://static-cdn.jtvnw.net/emoticons/v1/{id}/{size}";
+            return $"http://static-cdn.jtvnw.net/emoticons/v1/{id}/";
         }
 
         private List<ChatComponent> SplitTwitchEmotes(CommandPrivateMessage command)
@@ -91,7 +97,7 @@ namespace DMAssist.Twitchs
                 }
 
                 var emoteText = message.Substring(emote.StartIndex, emote.Count);
-                components.Add(new ChatComponentImage() { Type = "Twitch", URL = this.GetEmoteURL(emote.Id, "1.0"), Title = emoteText });
+                components.Add(new ChatComponentImage() { Type = "Twitch", URL = this.GetEmoteURL(emote.Id), Title = emoteText });
 
                 endIndex = emote.StartIndex + emote.Count;
             }
