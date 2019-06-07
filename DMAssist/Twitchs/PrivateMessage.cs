@@ -28,7 +28,7 @@ namespace DMAssist.Twitchs
 
         public void Write(JToken token)
         {
-            token["Bages"] = new JArray(this.Badges.Select(b => b.Path));
+            token["Badges"] = new JArray(this.Badges.Select(b => b.Path));
             token["DisplayName"] = this.DisplayName;
             token["Color"] = this.Color;
             token["Components"] = new JArray(this.Components.Select(c =>
