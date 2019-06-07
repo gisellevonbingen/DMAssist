@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DMAssist.WebServers
+namespace DMAssist.Twitchs
 {
     public abstract class ChatComponent
     {

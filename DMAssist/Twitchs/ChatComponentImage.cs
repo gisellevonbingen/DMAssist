@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace DMAssist.WebServers
+namespace DMAssist.Twitchs
 {
     public class ChatComponentImage : ChatComponent
     {

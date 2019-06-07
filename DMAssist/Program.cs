@@ -38,6 +38,7 @@ namespace DMAssist
         public FontManager FontManager { get; }
         public NotifyIconManager NotifyIconManager { get; }
         public TwitchChatManager TwitchChatManager { get; }
+        public TwitchChatHandler TwitchChatHandler { get; }
         public WebServerManager WebServerManager { get; }
         public MainForm MainForm { get; private set; }
 
@@ -60,6 +61,7 @@ namespace DMAssist
             this.FontManager = new FontManager();
             this.NotifyIconManager = new NotifyIconManager(this);
             this.TwitchChatManager = new TwitchChatManager();
+            this.TwitchChatHandler = new TwitchChatHandler();
             this.WebServerManager = new WebServerManager();
             this.MainForm = null;
 
@@ -185,6 +187,7 @@ namespace DMAssist
         protected virtual void Dispose(bool disposing)
         {
             ObjectUtils.DisposeQuietly(this.WebServerManager);
+            ObjectUtils.DisposeQuietly(this.TwitchChatHandler);
             ObjectUtils.DisposeQuietly(this.TwitchChatManager);
             ObjectUtils.DisposeQuietly(this.ThemeManager);
             ObjectUtils.DisposeQuietly(this.MainForm);

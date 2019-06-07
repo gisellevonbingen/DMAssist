@@ -7,7 +7,7 @@ using System.Web;
 using Newtonsoft.Json.Linq;
 using TwitchAPIs;
 
-namespace DMAssist.WebServers
+namespace DMAssist.Twitchs
 {
     public class ChatComponentText : ChatComponent
     {
