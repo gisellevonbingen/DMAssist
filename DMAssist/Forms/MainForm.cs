@@ -47,7 +47,7 @@ namespace DMAssist.Forms
 
         private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessage _e)
         {
-            this.BeginInvoke(new Action<PrivateMessage>((e)=>
+            this.BeginInvoke(new Action<PrivateMessage>((e) =>
             {
                 this.RecentChatView.Add(e);
             }), _e);
@@ -57,12 +57,16 @@ namespace DMAssist.Forms
         {
             base.OnSizeChanged(e);
 
-            var clientSize = this.ClientSize;
-            var packSize = this.GetPreferredSize(new Size(800, 0));
-
-            if (clientSize.Height != packSize.Height)
+            if (this.WindowState == FormWindowState.Normal)
             {
-                this.ClientSize = new Size(clientSize.Width, packSize.Height);
+                var clientSize = this.ClientSize;
+                var packSize = this.GetPreferredSize(new Size(800, 0));
+
+                if (clientSize.Height != packSize.Height)
+                {
+                    this.ClientSize = new Size(clientSize.Width, packSize.Height);
+                }
+
             }
 
         }
