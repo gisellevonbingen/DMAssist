@@ -1,4 +1,5 @@
-﻿using DMAssist.Themes;
+﻿using DMAssist.DCCons;
+using DMAssist.Themes;
 using DMAssist.Twitchs;
 using Newtonsoft.Json.Linq;
 using System;
@@ -96,11 +97,110 @@ namespace DMAssist.WebServers
             return components;
         }
 
+        private DCCon Filter(DCCon[] cons, string text)
+        {
+            var list = new List<DCCon>();
+
+            foreach (var con in cons)
+            {
+                if (con.Keywords.Any(keyword => keyword.Equals(text)) == true)
+                {
+                    return con;
+                }
+
+            }
+
+            return null;
+        }
+
+        private List<ChatComponent> SplitDCCon(DCCon[] cons, string text)
+        {
+            var values = new List<ChatComponent>();
+            var builder = new StringBuilder();
+            DCCon lastMatched = null;
+            string lastMatchedText = null;
+            bool matching = false;
+
+            for (int i = 0; i < text.Length + 1; i++)
+            {
+                var c = i < text.Length ? text[i] : '\0';
+
+                if (i == text.Length || c == '~')
+                {
+                    if (lastMatched != null)
+                    {
+                        values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = lastMatchedText, Type = "DCCon"});
+                        lastMatched = null;
+                        lastMatchedText = null;
+                        matching = false;
+                        builder.Clear();
+                    }
+                    else if (builder.Length > 0)
+                    {
+                        values.Add(new ChatComponentText() { Text = builder.ToString() });
+                        builder.Clear();
+                    }
+
+                    matching = true;
+                }
+                else
+                {
+                    if (matching == true)
+                    {
+                        var str = builder.ToString() + c;
+                        var matched = this.Filter(cons, str);
+
+                        if (matched != null)
+                        {
+                            lastMatched = matched;
+                            lastMatchedText = str;
+                        }
+                        else if (lastMatched != null)
+                        {
+                            values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = lastMatchedText, Type = "DCCon" });
+                            lastMatched = null;
+                            lastMatchedText = null;
+                            matching = false;
+                            builder.Clear();
+                        }
+
+                    }
+
+                    builder.Append(c);
+                }
+
+            }
+
+            return values;
+        }
+
+        private List<ChatComponent> SplitDCCon(List<ChatComponent> components)
+        {
+            var dcCons = Program.Instance.DCConManager.Values;
+            var values = new List<ChatComponent>();
+
+            foreach (var component in components)
+            {
+                if (component is ChatComponentText cct)
+                {
+                    values.AddRange(this.SplitDCCon(dcCons, cct.Text));
+                }
+                else
+                {
+                    values.Add(component);
+                }
+
+            }
+
+            return values;
+        }
+
         private List<ChatComponent> ParseMessage(CommandPrivateMessage command)
         {
-            var components = this.SplitTwitchEmotes(command);
+            var emotes = this.SplitTwitchEmotes(command);
+            var dccons = this.SplitDCCon(emotes);
 
-            return components;
+            return dccons;
         }
 
 
