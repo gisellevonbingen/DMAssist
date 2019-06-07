@@ -73,7 +73,7 @@ namespace DMAssist
 
         private void OnMenuItemDisposeClick(object sender, EventArgs e)
         {
-            Program.Instance.Dispose();
+            Program.Instance.QueryQuit();
         }
 
         private void OnImplDoubleClick(object sender, EventArgs e)

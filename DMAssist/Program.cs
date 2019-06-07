@@ -110,6 +110,17 @@ namespace DMAssist
 
         }
 
+        public void QueryQuit()
+        {
+            var result = MessageBox.Show("프로그램을 종료하시겠습니까?", "DMAssist - 종료", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+            if (result == DialogResult.OK)
+            {
+                Program.Instance.Dispose();
+            }
+
+        }
+
         private void OnTimerTick(object sender, EventArgs e)
         {
             this.UiUpdate?.Invoke(this, e);
