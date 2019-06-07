@@ -45,7 +45,7 @@ namespace DMAssist
 
         private System.Windows.Forms.Timer Timer;
 
-        public event EventHandler MainFormShow;
+        public event EventHandler MainFormVisibleChanged;
         public event EventHandler UiUpdate;
 
         public Program()
@@ -117,7 +117,7 @@ namespace DMAssist
 
         protected virtual void OnMainFormVisibleChanged(EventArgs e)
         {
-            this.MainFormShow?.Invoke(this, e);
+            this.MainFormVisibleChanged?.Invoke(this, e);
         }
 
         private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)

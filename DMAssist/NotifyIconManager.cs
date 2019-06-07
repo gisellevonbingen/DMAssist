@@ -38,20 +38,27 @@ namespace DMAssist
 
             impl.Visible = true;
 
-            program.MainFormShow += this.OnMainFormShow;
-            this.UpdateItemState();
+            program.MainFormVisibleChanged += this.OnMainFormVisibleChanged;
+            this.UpdateItemState(false);
         }
 
-        public void UpdateItemState()
+        public void UpdateItemState(bool visible)
         {
-            var mainFormVisible = Program.Instance?.MainForm?.Visible ?? false;
-            this.MenuItemMainFormShow.Enabled = mainFormVisible == false;
-            this.MenuItemMainFormHide.Enabled = mainFormVisible == true;
+            this.MenuItemMainFormShow.Enabled = visible == false;
+            this.MenuItemMainFormHide.Enabled = visible == true;
         }
 
-        private void OnMainFormShow(object sender, EventArgs e)
+        private void OnMainFormVisibleChanged(object sender, EventArgs e)
         {
-            this.UpdateItemState();
+            var visible = Program.Instance?.MainForm?.Visible ?? false;
+            this.UpdateItemState(visible);
+
+            if (visible == false)
+            {
+                var impl = this.Impl;
+                impl.ShowBalloonTip(1000, "DMAssist - " + this.MenuItemMainFormHide.Text, "프로그램은 계속 실행 중 입니다", ToolTipIcon.Info);
+            }
+
         }
 
         private void OnMenuItemMainFormShowClick(object sender, EventArgs e)
