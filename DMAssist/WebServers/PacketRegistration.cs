@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace DMAssist.WebServers
 {
-    public class MessageRegistration
+    public class PacketRegistration
     {
         public string Name { get; }
         public Type Type { get; }
-        public Func<MessageBase> Constructor { get; }
+        public Func<PacketBase> Constructor { get; }
 
-        public MessageRegistration(string name, Type type, Func<MessageBase> constructor)
+        public PacketRegistration(string name, Type type, Func<PacketBase> constructor)
         {
             this.Name = name;
             this.Type = type;

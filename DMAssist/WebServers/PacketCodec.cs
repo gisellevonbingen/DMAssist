@@ -7,36 +7,36 @@ using System.Threading.Tasks;
 
 namespace DMAssist.WebServers
 {
-    public class MessageCodec
+    public class PacketCodec
     {
-        private readonly List<MessageRegistration> List;
+        private readonly List<PacketRegistration> List;
 
-        public MessageCodec()
+        public PacketCodec()
         {
-            this.List = new List<MessageRegistration>();
+            this.List = new List<PacketRegistration>();
         }
 
-        public JToken Write(MessageBase message)
+        public JToken Write(PacketBase packet)
         {
-            var reg = this.From(message.GetType());
+            var reg = this.From(packet.GetType());
             var token = new JObject();
             token["Type"] = reg.Name;
-            message.Write(token);
+            packet.Write(token);
 
             return token;
         }
 
-        public MessageBase Read(JToken token)
+        public PacketBase Read(JToken token)
         {
             var type = token.Value<string>("Type");
             var reg = this.From(type);
-            var message = reg.Constructor();
-            message.Read(token);
+            var packet = reg.Constructor();
+            packet.Read(token);
 
-            return message;
+            return packet;
         }
 
-        public MessageRegistration From(string name)
+        public PacketRegistration From(string name)
         {
             lock (this.List)
             {
@@ -45,7 +45,7 @@ namespace DMAssist.WebServers
 
         }
 
-        public MessageRegistration From(Type type)
+        public PacketRegistration From(Type type)
         {
             lock (this.List)
             {
@@ -54,7 +54,7 @@ namespace DMAssist.WebServers
 
         }
 
-        public void Register<T>(string name, Func<T> constructor) where T : MessageBase
+        public void Register<T>(string name, Func<T> constructor) where T : PacketBase
         {
             lock (this.List)
             {
@@ -70,7 +70,7 @@ namespace DMAssist.WebServers
                     throw new ArgumentException($"Type({type}) is already registered");
                 }
 
-                this.List.Add(new MessageRegistration(name, type, constructor));
+                this.List.Add(new PacketRegistration(name, type, constructor));
             }
 
         }

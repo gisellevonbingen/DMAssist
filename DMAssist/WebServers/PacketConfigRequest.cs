@@ -7,11 +7,11 @@ using Newtonsoft.Json.Linq;
 
 namespace DMAssist.WebServers
 {
-    public class MessageConfigRequest : MessageBase
+    public class PacketConfigRequest : PacketBase
     {
         public string Name { get; set; }
 
-        public MessageConfigRequest()
+        public PacketConfigRequest()
         {
             this.Name = null;
         }

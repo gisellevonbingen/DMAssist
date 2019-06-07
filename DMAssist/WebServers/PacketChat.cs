@@ -9,11 +9,11 @@ using TwitchChat.Commands;
 
 namespace DMAssist.WebServers
 {
-    public class MessageChat : MessageBase
+    public class PacketChat : PacketBase
     {
         public PrivateMessage Message { get; set; }
 
-        public MessageChat()
+        public PacketChat()
         {
             this.Message = new PrivateMessage();
         }

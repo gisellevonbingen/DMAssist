@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace DMAssist.WebServers
 {
-    public class MessageConfigNotify : MessageBase
+    public class PacketConfigNotify : PacketBase
     {
-        public MessageConfigNotify()
+        public PacketConfigNotify()
         {
 
         }

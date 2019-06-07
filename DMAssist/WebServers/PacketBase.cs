@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DMAssist.WebServers
 {
-    public abstract class MessageBase
+    public abstract class PacketBase
     {
         public abstract void Read(JToken token);
 

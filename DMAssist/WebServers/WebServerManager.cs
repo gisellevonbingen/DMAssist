@@ -20,7 +20,7 @@ namespace DMAssist.WebServers
 
         private object StateLock { get; }
         public WebServerState State { get; private set; }
-        private MessageCodec Codec;
+        private PacketCodec Codec;
 
         private WebSocketServer Server;
 
@@ -28,20 +28,20 @@ namespace DMAssist.WebServers
         {
             this.StateLock = new object();
             this.State = WebServerState.Stopped;
-            this.Codec = new MessageCodec();
-            this.Codec.Register("config_req", () => new MessageConfigRequest());
-            this.Codec.Register("config_ntf", () => new MessageConfigNotify());
-            this.Codec.Register("chat", () => new MessageChat());
+            this.Codec = new PacketCodec();
+            this.Codec.Register("config_req", () => new PacketConfigRequest());
+            this.Codec.Register("config_ntf", () => new PacketConfigNotify());
+            this.Codec.Register("chat", () => new PacketChat());
 
             this.Server = null;
         }
 
         private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessage message)
         {
-            var webMessage = new MessageChat();
-            webMessage.Message = message;
+            var packet = new PacketChat();
+            packet.Message = message;
 
-            var writeToken = this.Codec.Write(webMessage);
+            var writeToken = this.Codec.Write(packet);
 
             foreach (var session in this.GetSessions())
             {
@@ -93,7 +93,7 @@ namespace DMAssist.WebServers
 
             if (session != null)
             {
-                var token = this.Codec.Write(new MessageConfigNotify());
+                var token = this.Codec.Write(new PacketConfigNotify());
                 session.Send(token);
             }
 
@@ -102,9 +102,9 @@ namespace DMAssist.WebServers
         private void OnWebBehaviorMessage(object sender, JToken token)
         {
             var behavior = sender as WebBehavior;
-            var message = this.Codec.Read(token);
+            var packet = this.Codec.Read(token);
 
-            if (message is MessageConfigRequest mcr)
+            if (packet is PacketConfigRequest mcr)
             {
                 behavior.ThemeName = mcr.Name;
             }
