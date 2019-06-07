@@ -97,7 +97,7 @@ namespace DMAssist.Twitchs
                 }
 
                 var emoteText = message.Substring(emote.StartIndex, emote.Count);
-                components.Add(new ChatComponentImage() { Type = "Twitch", URL = this.GetEmoteURL(emote.Id), Title = emoteText });
+                components.Add(new ChatComponentImage() { Type = "TwitchEmote", URL = this.GetEmoteURL(emote.Id), Title = emoteText });
 
                 endIndex = emote.StartIndex + emote.Count;
             }
