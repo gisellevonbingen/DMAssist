@@ -111,7 +111,7 @@ namespace DMAssist.WebServers
 
         }
 
-        private WebBehavior[] GetSessions()
+        public WebBehavior[] GetSessions()
         {
             var server = this.Server;
             return server.WebSocketServices[Path].Sessions.Sessions.OfType<WebBehavior>().ToArray();

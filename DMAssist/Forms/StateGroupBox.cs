@@ -95,7 +95,7 @@ namespace DMAssist.Forms
                 this.ChatChannelStateLabel.Text = $"채팅 채널 : {this.ToStringState(tcm.JoinState)}";
 
                 var wsm = program.WebServerManager;
-                this.WebServerStateLabel.Text = $"웹 서버 : {this.ToStringState(wsm.State)}";
+                this.WebServerStateLabel.Text = $"웹 서버 : {this.ToStringState(wsm.State)}, 세션 수 : {wsm.GetSessions().Length}";
 
                 var dcm = program.DCConManager;
                 this.DCConStateLabel.Text = $"디씨콘 개수 : {dcm.Values.Length}";
