@@ -29,7 +29,7 @@ namespace DMAssist.Twitchs
         {
             base.Write(token);
 
-            token["Text"] = HttpUtility.HtmlEncode(this.Text);
+            token["Text"] = this.Text;
         }
 
         public override string ToString()
