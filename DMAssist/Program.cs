@@ -61,7 +61,7 @@ namespace DMAssist
             this.FontManager = new FontManager();
             this.NotifyIconManager = new NotifyIconManager(this);
             this.TwitchChatManager = new TwitchChatManager();
-            this.TwitchChatHandler = new TwitchChatHandler();
+            this.TwitchChatHandler = new TwitchChatHandler(this.TwitchChatManager);
             this.WebServerManager = new WebServerManager();
             this.MainForm = null;
 

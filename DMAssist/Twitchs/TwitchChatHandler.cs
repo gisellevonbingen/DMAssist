@@ -13,9 +13,9 @@ namespace DMAssist.Twitchs
     {
         public event EventHandler<PrivateMessage> HandlePrivateMessage;
 
-        public TwitchChatHandler()
+        public TwitchChatHandler(TwitchChatManager tcm)
         {
-            Program.Instance.TwitchChatManager.PrivateMessage += this.OnPrivateMessage;
+            tcm.PrivateMessage += this.OnPrivateMessage;
         }
 
         protected virtual void OnHandlePrivateMessage(PrivateMessage message)
