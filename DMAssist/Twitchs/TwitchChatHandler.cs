@@ -155,7 +155,14 @@ namespace DMAssist.Twitchs
                     }
                     else if (builder.Length > 0)
                     {
-                        values.Add(new ChatComponentText() { Text = builder.ToString() });
+                        var str = builder.ToString();
+
+                        if (matching == true)
+                        {
+                            str = DCConPrefix + str;
+                        }
+
+                        values.Add(new ChatComponentText() { Text = str });
                         builder.Clear();
                     }
 
