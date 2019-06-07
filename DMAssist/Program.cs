@@ -5,6 +5,7 @@ using DMAssist.Properties;
 using DMAssist.Resources;
 using DMAssist.Themes;
 using DMAssist.Twitchs;
+using DMAssist.Utils;
 using DMAssist.WebServers;
 using Giselle.Commons;
 using Newtonsoft.Json.Linq;
@@ -26,9 +27,22 @@ namespace DMAssist
         [STAThread]
         public static void Main(string[] args)
         {
-            using (var instance = Instance = new Program())
+            using (var mutex = new Mutex(true, "DMAssist", out var createNew))
             {
-                instance.Run();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                if (createNew == false)
+                {
+                    MessageBox.Show("이미 DMAssist가 실행중입니다", "DMAssist", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                using (var instance = Instance = new Program())
+                {
+                    instance.Run();
+                }
+
             }
 
         }
@@ -54,8 +68,6 @@ namespace DMAssist
         public Program()
         {
             Console.CancelKeyPress += this.OnCancelKeyPress;
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
 
             this.Configuration = new ConfigurationManager(Path.Combine(Application.StartupPath, "Config.json"));
             this.ThemeManager = new ThemeManager();
@@ -76,7 +88,7 @@ namespace DMAssist
             try
             {
                 this.Configuration.Load();
-                this.ThemeManager.LoadDirectory(Application.StartupPath + "/themes");
+                this.ThemeManager.LoadDirectory(PathUtils.Normalize(Path.Combine(Application.StartupPath, "Themes")));
 
                 this.DCConManager.Reload();
                 this.BadgeManager.Reload();
