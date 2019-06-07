@@ -1,9 +1,11 @@
 ﻿using DMAssist.DCCons;
 using DMAssist.Themes;
 using DMAssist.Twitchs;
+using DMAssist.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -210,10 +212,17 @@ namespace DMAssist.WebServers
             var tags = command.Tags;
             var components = this.ParseMessage(e.Command);
 
+            var color = tags.Color;
+            
+            if (string.IsNullOrWhiteSpace(color) == true)
+            {
+                color = ColorUtils.Random().ToRgbaHashString();
+            }
+
             var message = new MessageChat();
             message.Badges.AddRange(tags.Badeges);
             message.DisplayName = tags.DisplayName;
-            message.Color = tags.Color;
+            message.Color = color;
             message.Components.AddRange(components);
 
             var writeToken = this.Codec.Write(message);

@@ -138,6 +138,7 @@
     <Compile Include="Twitchs\PrivateMessageEventArgs.cs" />
     <Compile Include="Twitchs\TwitchChatManager.cs" />
     <Compile Include="Twitchs\TwitchManagerState.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\ExplorerUtils.cs" />
     <Compile Include="Utils\PathUtils.cs" />
     <Compile Include="WebServers\ChatComponent.cs" />
