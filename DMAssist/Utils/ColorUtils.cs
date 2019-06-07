@@ -9,6 +9,8 @@ namespace DMAssist.Utils
 {
     public static class ColorUtils
     {
+        public const string HashPrefix = "#";
+
         public static Color Random()
         {
             return Random(new System.Random());
@@ -25,7 +27,7 @@ namespace DMAssist.Utils
 
         public static string ToRgbaHashString(this Color color)
         {
-            return $"#{color.R.ToString("X2")}{color.G.ToString("X2")}{color.B.ToString("X2")}{color.A.ToString("X2")}";
+            return $"{HashPrefix}{color.R.ToString("X2")}{color.G.ToString("X2")}{color.B.ToString("X2")}{color.A.ToString("X2")}";
         }
 
     }

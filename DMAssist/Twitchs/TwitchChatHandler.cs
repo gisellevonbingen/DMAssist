@@ -12,6 +12,7 @@ namespace DMAssist.Twitchs
     public class TwitchChatHandler : IDisposable
     {
         public event EventHandler<PrivateMessage> HandlePrivateMessage;
+        public const char DCConPrefix = '~';
 
         public TwitchChatHandler(TwitchChatManager tcm)
         {
@@ -136,11 +137,11 @@ namespace DMAssist.Twitchs
             {
                 var c = i < text.Length ? text[i] : '\0';
 
-                if (i == text.Length || c == '~')
+                if (i == text.Length || c == DCConPrefix)
                 {
                     if (lastMatched != null)
                     {
-                        values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = lastMatchedText, Type = "DCCon" });
+                        values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = DCConPrefix + lastMatchedText, Type = "DCCon" });
                         lastMatched = null;
                         lastMatchedText = null;
                         matching = false;
@@ -168,7 +169,7 @@ namespace DMAssist.Twitchs
                         }
                         else if (lastMatched != null)
                         {
-                            values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = lastMatchedText, Type = "DCCon" });
+                            values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = DCConPrefix + lastMatchedText, Type = "DCCon" });
                             lastMatched = null;
                             lastMatchedText = null;
                             matching = false;

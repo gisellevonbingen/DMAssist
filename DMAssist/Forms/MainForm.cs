@@ -42,12 +42,12 @@ namespace DMAssist.Forms
             this.ResumeLayout(false);
 
             this.ClientSize = this.GetPreferredSize(new Size(800, 0));
-            Program.Instance.TwitchChatManager.PrivateMessage += this.OnTwitchChatManagerPrivateMessage;
+            Program.Instance.TwitchChatHandler.HandlePrivateMessage += this.OnTwitchChatManagerPrivateMessage;
         }
 
-        private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessageEventArgs _e)
+        private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessage _e)
         {
-            this.BeginInvoke(new Action<PrivateMessageEventArgs>((e)=>
+            this.BeginInvoke(new Action<PrivateMessage>((e)=>
             {
                 this.RecentChatView.Add(e);
             }), _e);

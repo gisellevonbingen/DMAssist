@@ -43,6 +43,11 @@ namespace DMAssist.Twitchs
             return $"{this.Type}:{this.Title}";
         }
 
+        public override string ToSimpleString()
+        {
+            return this.Title;
+        }
+
     }
 
 }

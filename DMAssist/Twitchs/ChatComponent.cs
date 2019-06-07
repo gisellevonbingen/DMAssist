@@ -24,6 +24,11 @@ namespace DMAssist.Twitchs
 
         }
 
+        public virtual string ToSimpleString()
+        {
+            return this.ToString();
+        }
+
     }
 
 }

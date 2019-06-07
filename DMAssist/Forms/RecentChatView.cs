@@ -1,4 +1,5 @@
 ﻿using DMAssist.Twitchs;
+using DMAssist.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -47,10 +48,9 @@ namespace DMAssist.Forms
             this.ResumeLayout(false);
         }
 
-        public void Add(PrivateMessageEventArgs e)
+        public void Add(PrivateMessage message)
         {
-            var message = e.Command;
-            this.Add(message.Tags.DisplayName, message.Message);
+            this.Add(message.DisplayName, string.Join("", message.Components.Select(c => c.ToSimpleString())));
         }
 
         public void Add(string displayName, string text)
