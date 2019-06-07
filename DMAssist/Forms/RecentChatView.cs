@@ -24,9 +24,11 @@ namespace DMAssist.Forms
             this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
             this.AllowUserToOrderColumns = false;
-            this.AllowUserToResizeColumns = true;
+            this.AllowUserToResizeColumns = false;
             this.AllowUserToResizeRows = false;
             this.RowHeadersVisible = false;
+
+            this.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
             this.Font = Program.Instance.FontManager[9.0F, FontStyle.Regular];
 
