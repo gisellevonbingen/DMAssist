@@ -89,11 +89,11 @@ namespace DMAssist.WebServers
         private void OnThemeManagerConfigChanged(object sender, ThemeConfigChangedEventArgs e)
         {
             var theme = e.Theme;
-            var session = this.GetSessions().FirstOrDefault(s => string.Equals(theme.Name, s.ThemeName, StringComparison.OrdinalIgnoreCase));
+            var sessions = this.GetSessions().Where(s => string.Equals(theme.Name, s.ThemeName, StringComparison.OrdinalIgnoreCase));
+            var token = this.Codec.Write(new PacketConfigNotify());
 
-            if (session != null)
+            foreach (var session in sessions)
             {
-                var token = this.Codec.Write(new PacketConfigNotify());
                 session.Send(token);
             }
 
