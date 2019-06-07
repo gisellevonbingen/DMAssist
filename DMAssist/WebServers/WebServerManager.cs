@@ -114,7 +114,16 @@ namespace DMAssist.WebServers
         public WebBehavior[] GetSessions()
         {
             var server = this.Server;
-            return server.WebSocketServices[Path].Sessions.Sessions.OfType<WebBehavior>().ToArray();
+
+            if (server != null && server.WebSocketServices.TryGetServiceHost(Path, out var host) == true)
+            {
+                return host.Sessions.Sessions.OfType<WebBehavior>().ToArray();
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public void Stop()

@@ -12,10 +12,7 @@ namespace DMAssist.Forms
 {
     public class StateGroupBox : OptimizedGroupBox
     {
-        private Label ChatClientStateLabel;
-        private Label ChatChannelStateLabel;
-        private Label WebServerStateLabel;
-        private Label DCConStateLabel;
+        private Label StateLabel;
 
         public StateGroupBox()
         {
@@ -23,10 +20,7 @@ namespace DMAssist.Forms
 
             this.Text = "상태";
 
-            this.Controls.Add(this.ChatClientStateLabel = new Label());
-            this.Controls.Add(this.ChatChannelStateLabel = new Label());
-            this.Controls.Add(this.WebServerStateLabel = new Label());
-            this.Controls.Add(this.DCConStateLabel = new Label());
+            this.Controls.Add(this.StateLabel = new Label());
 
             this.ResumeLayout(false);
 
@@ -41,7 +35,7 @@ namespace DMAssist.Forms
             foreach (var label in this.Controls.OfType<Label>())
             {
                 var location = lastLocation;
-                var size = new Size(layoutBounds.Width, 21);
+                var size = new Size(layoutBounds.Width, 110);
                 var bounds = map[label] = new Rectangle(location, size);
 
                 lastLocation = new Point(bounds.Left, bounds.Bottom);
@@ -89,16 +83,25 @@ namespace DMAssist.Forms
             if (this.Visible == true)
             {
                 var program = Program.Instance;
-
-                var tcm = program.TwitchChatManager;
-                this.ChatClientStateLabel.Text = $"채팅 서버 : {this.ToStringState(tcm.State)}";
-                this.ChatChannelStateLabel.Text = $"채팅 채널 : {this.ToStringState(tcm.JoinState)}";
-
-                var wsm = program.WebServerManager;
-                this.WebServerStateLabel.Text = $"웹 서버 : {this.ToStringState(wsm.State)}, 세션 수 : {wsm.GetSessions().Length}";
+                var lines = new List<string>();
 
                 var dcm = program.DCConManager;
-                this.DCConStateLabel.Text = $"디씨콘 개수 : {dcm.Values.Length}";
+                lines.Add($"디씨콘 개수 : {dcm.Values.Length}");
+
+                var tcm = program.TwitchChatManager;
+                lines.Add($"채팅 서버 : {this.ToStringState(tcm.State)}");
+                lines.Add($"채팅 채널 : {this.ToStringState(tcm.JoinState)}");
+
+                var wsm = program.WebServerManager;
+                var sessionCount = wsm.GetSessions()?.Length;
+                lines.Add($"웹 서버 상태 : {this.ToStringState(wsm.State)}");
+
+                if (sessionCount.HasValue == true)
+                {
+                    lines.Add($"웹 서버 세션 수 : {sessionCount.Value}");
+                }
+
+                this.StateLabel.Text = string.Join(Environment.NewLine, lines);
             }
 
         }
