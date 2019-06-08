@@ -12,17 +12,26 @@ namespace DMAssist.Themes
 {
     public class ThemeManager : IDisposable
     {
+        public string Directory { get; }
+
         private List<Theme> Themes { get; }
-        private List<FileSystemWatcher> Watchers { get; }
+        private FileSystemWatcher Watcher { get; }
         public bool Disposed { get; private set; }
 
         public event EventHandler<ThemeConfigChangedEventArgs> ConfigChanged;
 
-        public ThemeManager()
+        public ThemeManager(string directory)
         {
+            this.Directory = directory;
+
             this.Themes = new List<Theme>();
-            this.Watchers = new List<FileSystemWatcher>();
+            var watcher = this.Watcher = new FileSystemWatcher(directory);
+            watcher.Created += this.OnConfigFileChanged;
+            watcher.Changed += this.OnConfigFileChanged;
+            watcher.EnableRaisingEvents = true;
+
             this.Disposed = false;
+            Directory = directory;
         }
 
         public Theme[] Values
@@ -38,61 +47,34 @@ namespace DMAssist.Themes
 
         }
 
-        public void LoadDirectory(string baseDirectory)
+
+        public void LoadAll()
         {
             this.EnsureDisposed();
 
-            var directories = Directory.GetDirectories(baseDirectory);
+            var configFiles = System.IO.Directory.GetFiles(this.Directory, "*.json");
 
-            foreach (var directoryPath in directories)
+            foreach (var configFile in configFiles)
             {
-                var configFilePath = PathUtils.Normalize(Path.Combine(directoryPath, "dmaconfig.json"));
-                this.Load(directoryPath, configFilePath);
-
+                this.Load(configFile);
             }
 
             this.Themes.Sort((o1, o2) => o1.Name.CompareTo(o2.Name));
         }
 
-        public void Load(string directoryPath, string configFilePath)
+        public void Load(string configFile)
         {
             this.EnsureDisposed();
 
-            if (File.Exists(configFilePath) == false)
+            var json = File.ReadAllText(configFile);
+            var jobj = JObject.Parse(json);
+
+            var theme = new Theme(configFile);
+            theme.Read(jobj);
+
+            lock (this.Themes)
             {
-                return;
-            }
-
-            FileSystemWatcher watcher = null;
-
-            try
-            {
-                var json = File.ReadAllText(configFilePath);
-                var jobj = JObject.Parse(json);
-
-                var theme = new Theme(directoryPath, configFilePath);
-                theme.Read(jobj);
-
-                lock (this.Themes)
-                {
-                    this.Themes.Add(theme);
-                }
-
-                watcher = new FileSystemWatcher(directoryPath);
-                watcher.Created += this.OnConfigFileChanged;
-                watcher.Changed += this.OnConfigFileChanged;
-                watcher.EnableRaisingEvents = true;
-
-                lock (this.Watchers)
-                {
-                    this.Watchers.Add(watcher);
-                }
-
-            }
-            catch (Exception e)
-            {
-                ObjectUtils.DisposeQuietly(watcher);
-                Console.WriteLine(e);
+                this.Themes.Add(theme);
             }
 
         }
@@ -125,17 +107,8 @@ namespace DMAssist.Themes
 
         protected virtual void Dispose(bool disposing)
         {
-            lock (this.Watchers)
-            {
-                this.Disposed = true;
-
-                foreach (var watcher in this.Watchers)
-                {
-                    ObjectUtils.DisposeQuietly(watcher);
-                }
-
-            }
-
+            this.Disposed = true;
+            ObjectUtils.DisposeQuietly(this.Watcher);
         }
 
         ~ThemeManager()

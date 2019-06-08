@@ -70,7 +70,7 @@ namespace DMAssist
             Console.CancelKeyPress += this.OnCancelKeyPress;
 
             this.Configuration = new ConfigurationManager(Path.Combine(Application.StartupPath, "Config.json"));
-            this.ThemeManager = new ThemeManager();
+            this.ThemeManager = new ThemeManager(PathUtils.Normalize(Path.Combine(Application.StartupPath, "Themes")));
             this.DCConManager = new DCConManager();
             this.BadgeManager = new BadgeManager();
             this.FontManager = new FontManager();
@@ -88,7 +88,7 @@ namespace DMAssist
             try
             {
                 this.Configuration.Load();
-                this.ThemeManager.LoadDirectory(PathUtils.Normalize(Path.Combine(Application.StartupPath, "Themes")));
+                this.ThemeManager.LoadAll();
 
                 this.DCConManager.Reload();
                 this.BadgeManager.Reload();
