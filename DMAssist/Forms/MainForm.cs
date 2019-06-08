@@ -111,7 +111,7 @@ namespace DMAssist.Forms
 
             var recentChatView = this.RecentChatView;
             var recentChatViewLeft = configGroupBoxBounds.Right + 10;
-            map[recentChatView] = Rectangle.FromLTRB(recentChatViewLeft, configGroupBoxBounds.Top, layoutBounds.Right, configGroupBoxBounds.Top + 462);
+            map[recentChatView] = Rectangle.FromLTRB(recentChatViewLeft, configGroupBoxBounds.Top, layoutBounds.Right, configGroupBoxBounds.Top + 370);
 
             return map;
         }

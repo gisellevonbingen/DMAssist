@@ -59,7 +59,7 @@ namespace DMAssist.Forms
         {
             var rows = this.Rows;
 
-            if (rows.Count > 18)
+            if (rows.Count > 14)
             {
                 rows.RemoveAt(0);
             }
