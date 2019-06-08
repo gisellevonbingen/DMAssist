@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,12 +90,35 @@ namespace DMAssist.WebServers
         private void OnThemeManagerConfigChanged(object sender, ThemeConfigChangedEventArgs e)
         {
             var theme = e.Theme;
-            var sessions = this.GetSessions().Where(s => string.Equals(theme.Name, s.ThemeName, StringComparison.OrdinalIgnoreCase));
-            var token = this.Codec.Write(new PacketConfigNotify());
+            var config = this.ReadConfigFile(theme);
 
-            foreach (var session in sessions)
+            if (config != null)
             {
-                session.Send(token);
+                var message = new PacketConfigNotify();
+                message.Config = config;
+                var token = this.Codec.Write(message);
+
+                var sessions = this.GetSessions().Where(s => string.Equals(theme.Name, s.ThemeName, StringComparison.OrdinalIgnoreCase));
+
+                foreach (var session in sessions)
+                {
+                    session.Send(token);
+                }
+
+            }
+
+        }
+
+        private JObject ReadConfigFile(Theme theme)
+        {
+            try
+            {
+                var json = File.ReadAllText(theme.ConfigFilePath);
+                return JObject.Parse(json);
+            }
+            catch (Exception)
+            {
+                return null;
             }
 
         }
@@ -106,7 +130,16 @@ namespace DMAssist.WebServers
 
             if (packet is PacketConfigRequest mcr)
             {
+                var theme = Program.Instance.ThemeManager.Values.FirstOrDefault(t => t.Name.Equals(mcr.Name));
                 behavior.ThemeName = mcr.Name;
+
+                if (theme != null)
+                {
+                    var message = new PacketConfigNotify();
+                    message.Config = this.ReadConfigFile(theme);
+                    behavior.Send(this.Codec.Write(message));
+                }
+
             }
 
         }

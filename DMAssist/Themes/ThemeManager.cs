@@ -29,7 +29,11 @@ namespace DMAssist.Themes
         {
             get
             {
-                return this.Themes.ToArray();
+                lock (this.Themes)
+                {
+                    return this.Themes.ToArray();
+                }
+
             }
 
         }
@@ -105,16 +109,11 @@ namespace DMAssist.Themes
         private void OnConfigFileChanged(object sender, FileSystemEventArgs e)
         {
             var filePath = PathUtils.Normalize(e.FullPath);
+            var theme = this.Values.FirstOrDefault(t => t.ConfigFilePath.Equals(filePath, StringComparison.OrdinalIgnoreCase));
 
-            lock (this.Themes)
+            if (theme != null)
             {
-                var theme = this.Themes.FirstOrDefault(t => t.ConfigFilePath.Equals(filePath, StringComparison.OrdinalIgnoreCase));
-
-                if (theme != null)
-                {
-                    this.OnConfigChanged(new ThemeConfigChangedEventArgs(theme));
-                }
-
+                this.OnConfigChanged(new ThemeConfigChangedEventArgs(theme));
             }
 
         }

@@ -9,6 +9,8 @@ namespace DMAssist.WebServers
 {
     public class PacketConfigNotify : PacketBase
     {
+        public JObject Config { get; set; }
+
         public PacketConfigNotify()
         {
 
@@ -16,12 +18,11 @@ namespace DMAssist.WebServers
 
         public override void Read(JToken token)
         {
-
         }
 
         public override void Write(JToken token)
         {
-
+            token["Config"] = this.Config;
         }
 
     }
