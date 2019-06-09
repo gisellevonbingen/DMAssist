@@ -14,9 +14,13 @@ namespace DMAssist.Twitchs
         public event EventHandler<PrivateMessage> HandlePrivateMessage;
         public const char DCConPrefix = '~';
 
+        private Dictionary<string, string> UserChatColors;
+
         public TwitchChatHandler(TwitchChatManager tcm)
         {
             tcm.PrivateMessage += this.OnPrivateMessage;
+
+            this.UserChatColors = new Dictionary<string, string>();
         }
 
         protected virtual void OnHandlePrivateMessage(PrivateMessage message)
@@ -30,24 +34,37 @@ namespace DMAssist.Twitchs
             return badges.Select(b => bm.Get(b.Name, b.Version)).Where(b => b != null);
         }
 
+        private string PeekColor(string id, string tagColor)
+        {
+            if (string.IsNullOrWhiteSpace(tagColor) == true)
+            {
+                lock (this.UserChatColors)
+                {
+                    if (this.UserChatColors.TryGetValue(id, out var color) == false)
+                    {
+                        color = ColorUtils.Random().ToRgbaHashString();
+                        this.UserChatColors[id] = color;
+                    }
+
+                    return color;
+                }
+
+            }
+
+            return tagColor;
+        }
+
         private void OnPrivateMessage(object sender, PrivateMessageEventArgs e)
         {
             var command = e.Command;
             var tags = command.Tags;
             var components = this.ParseMessage(e.Command);
 
-            var color = tags.Color;
-
-            if (string.IsNullOrWhiteSpace(color) == true)
-            {
-                color = ColorUtils.Random().ToRgbaHashString();
-            }
-
             var message = new PrivateMessage();
             message.Badges.AddRange(this.SelectBadges(tags.Badeges));
             message.DisplayName = tags.DisplayName;
             message.Components.AddRange(components);
-            message.Color = color;
+            message.Color = this.PeekColor(tags.UserId, tags.Color);
 
             this.OnHandlePrivateMessage(message);
         }
