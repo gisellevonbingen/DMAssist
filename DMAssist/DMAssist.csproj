@@ -36,8 +36,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Giselle.Commons">
-      <HintPath>..\Libs\Giselle.Commons.dll</HintPath>
+    <Reference Include="Giselle.Commons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\TwitchChat\Giselle.Commons.dll</HintPath>
     </Reference>
     <Reference Include="IRCProtocol">
       <HintPath>..\Libs\TwitchChat\IRCProtocol.dll</HintPath>
