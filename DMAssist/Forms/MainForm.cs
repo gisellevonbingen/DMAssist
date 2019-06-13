@@ -21,9 +21,17 @@ namespace DMAssist.Forms
 
         public MainForm()
         {
+            var assembly = this.GetType().Assembly;
+            var version = assembly.GetName().Version;
+            var major = version.Major.ToString("D2");
+            var minor = version.Minor.ToString("D2");
+            var build = version.Build.ToString("D2");
+            var versionToString = $"v{major}.{minor}.{build}";
+            var dateTimeToString = new DateTime(2019, 06, 13, 10, 30, 00).ToString("yyyy-MM-dd HH:mm");
+
             this.SuspendLayout();
 
-            this.Text = "Daengmin Assist";
+            this.Text = $"Daengmin Assist - {versionToString} - {dateTimeToString}";
             this.Icon = this._Icon = Icon.FromHandle(Properties.Resources.Icon.GetHicon());
             this.MaximizeBox = false;
 
