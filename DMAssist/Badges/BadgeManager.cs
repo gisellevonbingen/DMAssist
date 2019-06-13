@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TwitchAPIs;
+using TwitchAPIs.Web;
 
 namespace DMAssist.Badges
 {
     public class BadgeManager
     {
-        private TwitchAPI API;
         private Dictionary<string, Dictionary<string, Badge>> Badges;
 
         public BadgeManager()
         {
-            this.API = new TwitchAPI();
             this.Badges = new Dictionary<string, Dictionary<string, Badge>>();
         }
 
@@ -67,24 +66,15 @@ namespace DMAssist.Badges
                 {
                     var config = Program.Instance.Configuration.Value;
 
-                    var api = this.API;
-                    api.ClientId = config.ClientId;
-                    var user = api.Users.GetUser(new UserRequest(UserType.Login, config.TwitchChannelName));
+                    var api = new TwitchAPI();
+                    var set = api.Badges.GetIntegrationBadges(config.TwitchChannelName);
 
-                    if (user != null)
+                    var badges = this.Badges;
+
+                    lock (badges)
                     {
-                        var globalSet = api.Badges.GetGlobalBadges();
-                        var channelSet = api.Badges.GetChannelBadges(user.Id);
-
-                        var badges = this.Badges;
-
-                        lock (badges)
-                        {
-                            badges.Clear();
-                            this.PutSet(badges, globalSet);
-                            this.PutSet(badges, channelSet);
-                        }
-
+                        badges.Clear();
+                        this.PutSet(badges, set);
                     }
 
                 }
