@@ -12,6 +12,7 @@ namespace DMAssist.Twitchs
     {
         public List<Badge> Badges { get; }
         public string DisplayName { get; set; }
+        public bool ColorChat { get; set; }
         public List<ChatComponent> Components { get; }
         public string Color { get; set; }
 
@@ -30,7 +31,7 @@ namespace DMAssist.Twitchs
         {
             token["Badges"] = new JArray(this.Badges.Select(b => b.Path));
             token["DisplayName"] = this.DisplayName;
-            token["Color"] = this.Color;
+            token["ColorChat"] = this.ColorChat;
             token["Components"] = new JArray(this.Components.Select(c =>
             {
                 var t = new JObject();
@@ -38,6 +39,7 @@ namespace DMAssist.Twitchs
                 return t;
             }));
 
+            token["Color"] = this.Color;
         }
 
     }

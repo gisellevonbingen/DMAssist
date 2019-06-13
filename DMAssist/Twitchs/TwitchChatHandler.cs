@@ -11,8 +11,11 @@ namespace DMAssist.Twitchs
 {
     public class TwitchChatHandler : IDisposable
     {
+        public static char DCConPrefix { get; } = '~';
+        public static string ColorChatSuffix { get; } = ((char)1).ToString();
+        public static string ColorChatPrefix { get; } = $"{ColorChatSuffix}ACTION ";
+
         public event EventHandler<PrivateMessage> HandlePrivateMessage;
-        public const char DCConPrefix = '~';
 
         private Dictionary<string, string> UserChatColors;
 
@@ -58,12 +61,13 @@ namespace DMAssist.Twitchs
         {
             var command = e.Command;
             var tags = command.Tags;
-            var components = this.ParseMessage(e.Command);
+            var tuple = this.ParseMessage(e.Command);
 
             var message = new PrivateMessage();
             message.Badges.AddRange(this.SelectBadges(tags.Badeges));
             message.DisplayName = tags.DisplayName;
-            message.Components.AddRange(components);
+            message.ColorChat = tuple.ColorChat;
+            message.Components.AddRange(tuple.Components);
             message.Color = this.PeekColor(tags.UserId, tags.Color);
 
             this.OnHandlePrivateMessage(message);
@@ -95,13 +99,12 @@ namespace DMAssist.Twitchs
             return $"http://static-cdn.jtvnw.net/emoticons/v1/{id}/";
         }
 
-        private List<ChatComponent> SplitTwitchEmotes(CommandPrivateMessage command)
+        private List<ChatComponent> SplitTwitchEmotes(string message, TwitchChat.Commands.Emote[] tagEmotes)
         {
-            var message = command.Message;
             var components = new List<ChatComponent>();
 
             var endIndex = 0;
-            var emotes = this.ParseTwitchEmotes(command.Tags.Emotes);
+            var emotes = this.ParseTwitchEmotes(tagEmotes);
 
             foreach (var emote in emotes)
             {
@@ -237,12 +240,23 @@ namespace DMAssist.Twitchs
             return values;
         }
 
-        private List<ChatComponent> ParseMessage(CommandPrivateMessage command)
+        private (bool ColorChat, List<ChatComponent> Components) ParseMessage(CommandPrivateMessage command)
         {
-            var emotes = this.SplitTwitchEmotes(command);
-            var dccons = this.SplitDCCon(emotes);
+            var message = command.Message;
+            var colorChat = false;
 
-            return dccons;
+            if (message.StartsWith(ColorChatPrefix) && message.EndsWith(ColorChatSuffix))
+            {
+                var count = message.Length - ColorChatPrefix.Length - ColorChatSuffix.Length;
+                message = message.Substring(ColorChatPrefix.Length, count);
+
+                colorChat = true;
+            }
+
+            var emotes = this.SplitTwitchEmotes(message, command.Tags.Emotes);
+            var results = this.SplitDCCon(emotes);
+
+            return (colorChat, results);
         }
 
         protected virtual void Dispose(bool disposing)
