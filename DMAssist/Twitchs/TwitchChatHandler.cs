@@ -168,10 +168,6 @@ namespace DMAssist.Twitchs
                     if (lastMatched != null)
                     {
                         values.Add(new ChatComponentImage() { URL = lastMatched.Path, Title = DCConPrefix + lastMatchedText, Type = "DCCon" });
-                        lastMatched = null;
-                        lastMatchedText = null;
-                        matching = false;
-                        builder.Clear();
                     }
                     else
                     {
@@ -185,11 +181,13 @@ namespace DMAssist.Twitchs
                         if (string.IsNullOrWhiteSpace(str) == false)
                         {
                             values.Add(new ChatComponentText() { Text = str });
-                            builder.Clear();
                         }
 
                     }
 
+                    lastMatched = null;
+                    lastMatchedText = null;
+                    builder.Clear();
                     matching = true;
                 }
                 else
