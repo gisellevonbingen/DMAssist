@@ -173,7 +173,7 @@ namespace DMAssist.Twitchs
                         matching = false;
                         builder.Clear();
                     }
-                    else if (builder.Length > 0)
+                    else
                     {
                         var str = builder.ToString();
 
@@ -182,8 +182,12 @@ namespace DMAssist.Twitchs
                             str = DCConPrefix + str;
                         }
 
-                        values.Add(new ChatComponentText() { Text = str });
-                        builder.Clear();
+                        if (string.IsNullOrWhiteSpace(str) == false)
+                        {
+                            values.Add(new ChatComponentText() { Text = str });
+                            builder.Clear();
+                        }
+
                     }
 
                     matching = true;
