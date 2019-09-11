@@ -10,7 +10,7 @@ namespace DMAssist.Twitchs
 {
     public class PrivateMessage
     {
-        public List<Badge> Badges { get; }
+        public List<TwitchBadge> Badges { get; }
         public string DisplayName { get; set; }
         public bool ColorChat { get; set; }
         public List<ChatComponent> Components { get; }
@@ -18,7 +18,7 @@ namespace DMAssist.Twitchs
 
         public PrivateMessage()
         {
-            this.Badges = new List<Badge>();
+            this.Badges = new List<TwitchBadge>();
             this.Components = new List<ChatComponent>();
         }
 
@@ -29,7 +29,12 @@ namespace DMAssist.Twitchs
 
         public void Write(JToken token)
         {
-            token["Badges"] = new JArray(this.Badges.Select(b => b.Path));
+            token["Badges"] = new JArray(this.Badges.Select(c =>
+            {
+                var t = new JObject();
+                c.Write(t);
+                return t;
+            }));
             token["DisplayName"] = this.DisplayName;
             token["ColorChat"] = this.ColorChat;
             token["Components"] = new JArray(this.Components.Select(c =>

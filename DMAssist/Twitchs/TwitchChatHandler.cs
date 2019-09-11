@@ -31,10 +31,14 @@ namespace DMAssist.Twitchs
             this.HandlePrivateMessage?.Invoke(this, message);
         }
 
-        private IEnumerable<Badges.Badge> SelectBadges(Badge[] badges)
+        private IEnumerable<TwitchBadge> SelectBadges(Badge[] badges)
         {
             var bm = Program.Instance.BadgeManager;
-            return badges.Select(b => bm.Get(b.Name, b.Version)).Where(b => b != null);
+            return badges.Select(b =>
+            {
+                var lb = bm.Get(b.Name, b.Version);
+                return lb != null ? new TwitchBadge() { Name = b.Name, Version = b.Version, Path = lb.Path } : null;
+            }).Where(b => b != null);
         }
 
         private string PeekColor(string id, string tagColor)

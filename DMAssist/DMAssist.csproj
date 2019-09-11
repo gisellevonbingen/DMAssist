@@ -143,6 +143,7 @@
     <Compile Include="Twitchs\JoinState.cs" />
     <Compile Include="Twitchs\PrivateMessage.cs" />
     <Compile Include="Twitchs\PrivateMessageEventArgs.cs" />
+    <Compile Include="Twitchs\TwitchBadge.cs" />
     <Compile Include="Twitchs\TwitchChatHandler.cs" />
     <Compile Include="Twitchs\TwitchChatManager.cs" />
     <Compile Include="Twitchs\TwitchManagerState.cs" />
