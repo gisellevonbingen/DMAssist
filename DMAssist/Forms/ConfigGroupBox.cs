@@ -12,6 +12,7 @@ namespace DMAssist.Forms
 {
     public class ConfigGroupBox : OptimizedGroupBox
     {
+        private LabeledTextBox ClientIdControl;
         private LabeledTextBox TwitchChannelNameControl;
         private LabeledTextBox DCConURLControl;
         private LabeledTextBox WebSocketServerControl;
@@ -24,6 +25,11 @@ namespace DMAssist.Forms
             this.SuspendLayout();
 
             this.Text = "설정";
+
+            var clientIdControl = this.ClientIdControl = new LabeledTextBox();
+            clientIdControl.Label.Text = "Client-Id";
+            clientIdControl.TextBox.Text = value.ClientId;
+            this.Controls.Add(clientIdControl);
 
             var twitchChannelNameControl = this.TwitchChannelNameControl = new LabeledTextBox();
             twitchChannelNameControl.Label.Text = "트위치 채널";
@@ -76,6 +82,7 @@ namespace DMAssist.Forms
             var program = Program.Instance;
 
             var config = program.Configuration;
+            config.Value.ClientId = this.ClientIdControl.TextBox.Text;
             config.Value.TwitchChannelName = this.TwitchChannelNameControl.TextBox.Text;
             config.Value.DCConURL = this.DCConURLControl.TextBox.Text;
             config.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
