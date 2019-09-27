@@ -76,10 +76,14 @@ namespace DMAssist.Toonat
             var request = e.Request;
             var response = e.Response;
 
+            response.AppendHeader("Access-Control-Allow-Origin", "*");
+            response.AppendHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST");
+            response.AppendHeader("Access-Control-Allow-Headers", "Content-Type");
+
             using (var wresponse = RequestToOriginal(request.Url.LocalPath, request.HttpMethod))
             {
                 response.StatusCode = (int)HttpStatusCode.OK;
-                response.ContentType = "text/json";
+                response.ContentType = "application/json";
 
                 using (var wstream = wresponse.GetResponseStream())
                 {
@@ -99,9 +103,6 @@ namespace DMAssist.Toonat
 
             }
 
-            response.Headers["Access-Control-Allow-Origin"] = "*";
-            response.Headers["Access-Control-Allow-Methods"] = "GET, OPTIONS, POST";
-            response.Headers["Access-Control-Allow-Headers"] = "Content-Type";
         }
 
         ~ToonationManager()
