@@ -16,6 +16,7 @@ namespace DMAssist.Forms
         private LabeledTextBox TwitchChannelNameControl;
         private LabeledTextBox DCConURLControl;
         private LabeledTextBox WebSocketServerControl;
+        private LabeledTextBox ToonationWidgetControl;
 
         private Button ApplyButton;
 
@@ -45,6 +46,11 @@ namespace DMAssist.Forms
             webSocketServerControl.Label.Text = "WebSocket 포트";
             webSocketServerControl.TextBox.Text = value.WebSocketPort.ToString();
             this.Controls.Add(webSocketServerControl);
+
+            var toonationWidgetServerControl = this.ToonationWidgetControl = new LabeledTextBox();
+            toonationWidgetServerControl.Label.Text = "투네이션 위젯 포트";
+            toonationWidgetServerControl.TextBox.Text = value.ToonationWidgetPort.ToString();
+            this.Controls.Add(toonationWidgetServerControl);
 
             var applyButton = this.ApplyButton = new Button();
             applyButton.Text = "적용";
@@ -86,12 +92,14 @@ namespace DMAssist.Forms
             config.Value.TwitchChannelName = this.TwitchChannelNameControl.TextBox.Text;
             config.Value.DCConURL = this.DCConURLControl.TextBox.Text;
             config.Value.WebSocketPort = NumberUtils.ToUShort(this.WebSocketServerControl.TextBox.Text);
+            config.Value.ToonationWidgetPort = NumberUtils.ToUShort(this.ToonationWidgetControl.TextBox.Text);
             config.Save();
 
             program.DCConManager.Reload();
             program.BadgeManager.Reload();
             program.TwitchChatManager.AddActivity(new ActivityChangeChannel(config.Value.TwitchChannelName));
             program.WebServerManager.Start();
+            program.ToonationManager.Start();
         }
 
     }

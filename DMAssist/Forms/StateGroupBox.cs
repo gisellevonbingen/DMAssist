@@ -1,4 +1,5 @@
-﻿using DMAssist.Twitchs;
+﻿using DMAssist.Toonat;
+using DMAssist.Twitchs;
 using DMAssist.WebServers;
 using System;
 using System.Collections.Generic;
@@ -35,13 +36,24 @@ namespace DMAssist.Forms
             foreach (var label in this.Controls.OfType<Label>())
             {
                 var location = lastLocation;
-                var size = new Size(layoutBounds.Width, 110);
+                var size = new Size(layoutBounds.Width, 130);
                 var bounds = map[label] = new Rectangle(location, size);
 
                 lastLocation = new Point(bounds.Left, bounds.Bottom);
             }
 
             return map;
+        }
+
+        private string ToStringState(ToonationState state)
+        {
+            var map = new Dictionary<ToonationState, string>();
+            map[ToonationState.Stopped] = "정지 됨";
+            map[ToonationState.Starting] = "시작 중";
+            map[ToonationState.Started] = "시작 됨";
+            map[ToonationState.Stopping] = "정지 중";
+
+            return map.TryGetValue(state, out var text) ? text : null;
         }
 
         private string ToStringState(WebServerState state)
@@ -100,6 +112,8 @@ namespace DMAssist.Forms
                 {
                     lines.Add($"웹 서버 세션 수 : {sessionCount.Value}");
                 }
+
+                lines.Add($"투네이션 위젯 서버 상태 : {this.ToStringState(program.ToonationManager.State)}");
 
                 this.StateLabel.Text = string.Join(Environment.NewLine, lines);
             }

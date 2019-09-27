@@ -4,6 +4,7 @@ using DMAssist.Forms;
 using DMAssist.Properties;
 using DMAssist.Resources;
 using DMAssist.Themes;
+using DMAssist.Toonat;
 using DMAssist.Twitchs;
 using DMAssist.Utils;
 using DMAssist.WebServers;
@@ -56,6 +57,7 @@ namespace DMAssist
         public TwitchChatManager TwitchChatManager { get; }
         public TwitchChatHandler TwitchChatHandler { get; }
         public WebServerManager WebServerManager { get; }
+        public ToonationManager ToonationManager { get; }
         public MainForm MainForm { get; private set; }
 
         public bool Disposed { get; private set; }
@@ -78,6 +80,7 @@ namespace DMAssist
             this.TwitchChatManager = new TwitchChatManager();
             this.TwitchChatHandler = new TwitchChatHandler(this.TwitchChatManager);
             this.WebServerManager = new WebServerManager();
+            this.ToonationManager = new ToonationManager();
             this.MainForm = null;
 
             this.Disposed = false;
@@ -97,6 +100,7 @@ namespace DMAssist
                 this.TwitchChatManager.AddActivity(new ActivityChangeChannel(this.Configuration.Value.TwitchChannelName));
 
                 this.WebServerManager.Start();
+                this.ToonationManager.Start();
 
                 var context = new ApplicationContext();
 
@@ -202,6 +206,7 @@ namespace DMAssist
 
         protected virtual void Dispose(bool disposing)
         {
+            ObjectUtils.DisposeQuietly(this.ToonationManager);
             ObjectUtils.DisposeQuietly(this.WebServerManager);
             ObjectUtils.DisposeQuietly(this.TwitchChatHandler);
             ObjectUtils.DisposeQuietly(this.TwitchChatManager);

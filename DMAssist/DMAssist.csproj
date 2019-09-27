@@ -138,6 +138,8 @@
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeConfigChangedEventArgs.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
+    <Compile Include="Toonat\ToonationManager.cs" />
+    <Compile Include="Toonat\ToonationState.cs" />
     <Compile Include="Twitchs\Activity.cs" />
     <Compile Include="Twitchs\ActivityChangeChannel.cs" />
     <Compile Include="Twitchs\JoinState.cs" />
