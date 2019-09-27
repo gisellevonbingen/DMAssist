@@ -27,7 +27,7 @@ namespace DMAssist.Forms
             var minor = version.Minor.ToString("D2");
             var build = version.Build.ToString("D2");
             var versionToString = $"v{major}.{minor}.{build}";
-            var dateTimeToString = new DateTime(2019, 06, 13, 10, 30, 00).ToString("yyyy-MM-dd HH:mm");
+            var dateTimeToString = new DateTime(2019, 09, 27, 10, 00, 00).ToString("yyyy-MM-dd HH:mm");
 
             this.SuspendLayout();
 
