@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace DMAssist.Twitchs
 {
-    public class PrivateMessage
+    public class PrivateMessage : WrappedCommand
     {
         public List<TwitchBadge> Badges { get; }
         public string DisplayName { get; set; }
         public bool ColorChat { get; set; }
         public List<ChatComponent> Components { get; }
         public string Color { get; set; }
+        public string UserName { get; set; }
+        public string Id { get; set; }
+
+        public override string Type => "PrivateMessage";
 
         public PrivateMessage()
         {
@@ -22,13 +26,15 @@ namespace DMAssist.Twitchs
             this.Components = new List<ChatComponent>();
         }
 
-        public void Read(JToken token)
+        public override void Read(JToken token)
         {
-
+            base.Read(token);
         }
 
-        public void Write(JToken token)
+        public override void Write(JToken token)
         {
+            base.Write(token);
+
             token["Badges"] = new JArray(this.Badges.Select(c =>
             {
                 var t = new JObject();
@@ -45,6 +51,8 @@ namespace DMAssist.Twitchs
             }));
 
             token["Color"] = this.Color;
+            token["UserName"] = this.UserName;
+            token["Id"] = this.Id;
         }
 
     }

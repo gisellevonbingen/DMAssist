@@ -32,15 +32,15 @@ namespace DMAssist.WebServers
             this.Codec = new PacketCodec();
             this.Codec.Register("config_req", () => new PacketConfigRequest());
             this.Codec.Register("config_ntf", () => new PacketConfigNotify());
-            this.Codec.Register("chat", () => new PacketChat());
+            this.Codec.Register("command", () => new PacketCommand());
 
             this.Server = null;
         }
 
-        private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessage message)
+        private void OnTwitchChatManagerHandleCommand(object sender, WrappedCommand command)
         {
-            var packet = new PacketChat();
-            packet.Message = message;
+            var packet = new PacketCommand();
+            packet.Command = command;
 
             var writeToken = this.Codec.Write(packet);
 
@@ -72,7 +72,7 @@ namespace DMAssist.WebServers
                         return behavior;
                     });
 
-                    program.TwitchChatHandler.HandlePrivateMessage += this.OnTwitchChatManagerPrivateMessage;
+                    program.TwitchChatHandler.HandleCommand += this.OnTwitchChatManagerHandleCommand;
                     program.ThemeManager.ConfigChanged += this.OnThemeManagerConfigChanged;
 
                     this.State = WebServerState.Started;
@@ -174,7 +174,7 @@ namespace DMAssist.WebServers
 
                 var program = Program.Instance;
                 program.ThemeManager.ConfigChanged -= this.OnThemeManagerConfigChanged;
-                program.TwitchChatHandler.HandlePrivateMessage -= this.OnTwitchChatManagerPrivateMessage;
+                program.TwitchChatHandler.HandleCommand -= this.OnTwitchChatManagerHandleCommand;
                 this.State = WebServerState.Stopped;
             }
 

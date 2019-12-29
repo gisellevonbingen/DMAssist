@@ -142,13 +142,16 @@
     <Compile Include="Toonat\ToonationState.cs" />
     <Compile Include="Twitchs\Activity.cs" />
     <Compile Include="Twitchs\ActivityChangeChannel.cs" />
+    <Compile Include="Twitchs\ClearChat.cs" />
+    <Compile Include="Twitchs\ClearMessage.cs" />
     <Compile Include="Twitchs\JoinState.cs" />
     <Compile Include="Twitchs\PrivateMessage.cs" />
-    <Compile Include="Twitchs\PrivateMessageEventArgs.cs" />
+    <Compile Include="Twitchs\CommandEventArgs.cs" />
     <Compile Include="Twitchs\TwitchBadge.cs" />
     <Compile Include="Twitchs\TwitchChatHandler.cs" />
     <Compile Include="Twitchs\TwitchChatManager.cs" />
     <Compile Include="Twitchs\TwitchManagerState.cs" />
+    <Compile Include="Twitchs\WrappedCommand.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\ExplorerUtils.cs" />
     <Compile Include="Utils\PathUtils.cs" />
@@ -157,7 +160,7 @@
     <Compile Include="Twitchs\ChatComponentText.cs" />
     <Compile Include="Twitchs\Emote.cs" />
     <Compile Include="WebServers\PacketBase.cs" />
-    <Compile Include="WebServers\PacketChat.cs" />
+    <Compile Include="WebServers\PacketCommand.cs" />
     <Compile Include="WebServers\PacketConfigNotify.cs" />
     <Compile Include="WebServers\PacketConfigRequest.cs" />
     <Compile Include="WebServers\PacketCodec.cs" />

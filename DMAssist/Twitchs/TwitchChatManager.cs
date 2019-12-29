@@ -29,7 +29,7 @@ namespace DMAssist.Twitchs
         public TwitchManagerState State { get; private set; }
         public JoinState JoinState { get; private set; }
 
-        public event EventHandler<PrivateMessageEventArgs> PrivateMessage;
+        public event EventHandler<CommandEventArgs> CommandRecieve;
 
         public TwitchChatManager()
         {
@@ -49,9 +49,9 @@ namespace DMAssist.Twitchs
             this.JoinState = JoinState.Parted;
         }
 
-        protected virtual void OnPrivateMessage(PrivateMessageEventArgs e)
+        protected virtual void OnCommandRecieve(CommandEventArgs e)
         {
-            this.PrivateMessage?.Invoke(this, e);
+            this.CommandRecieve?.Invoke(this, e);
         }
 
         public void AddActivity(Activity activity)
@@ -131,15 +131,12 @@ namespace DMAssist.Twitchs
                     {
                         this.UpdateJoinState(JoinState.Parted);
                     }
-                    else if (command is CommandPrivateMessage cpm)
-                    {
-                        this.OnPrivateMessage(new PrivateMessageEventArgs(cpm));
-                    }
                     else if (command is CommandPing ping)
                     {
                         client.Send(new CommandPong() { Value = ping.Value });
                     }
 
+                    this.OnCommandRecieve(new CommandEventArgs(command));
                 }
 
             }
@@ -178,6 +175,7 @@ namespace DMAssist.Twitchs
                             client = this.Client = new TwitchChatClient();
                             client.Type = ProtocolType.IRC;
                             client.Capabilities.Add(KnownCapabilities.Tags);
+                            client.Capabilities.Add(KnownCapabilities.Commands);
                             client.Nick = "justinfan69740";
                         }
 

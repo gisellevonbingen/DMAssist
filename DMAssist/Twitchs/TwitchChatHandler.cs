@@ -15,20 +15,20 @@ namespace DMAssist.Twitchs
         public static string ColorChatSuffix { get; } = ((char)1).ToString();
         public static string ColorChatPrefix { get; } = $"{ColorChatSuffix}ACTION ";
 
-        public event EventHandler<PrivateMessage> HandlePrivateMessage;
+        public event EventHandler<WrappedCommand> HandleCommand;
 
         private Dictionary<string, string> UserChatColors;
 
         public TwitchChatHandler(TwitchChatManager tcm)
         {
-            tcm.PrivateMessage += this.OnPrivateMessage;
+            tcm.CommandRecieve += this.OnCommandRecieve;
 
             this.UserChatColors = new Dictionary<string, string>();
         }
 
-        protected virtual void OnHandlePrivateMessage(PrivateMessage message)
+        protected virtual void OnHandleCommand(WrappedCommand command)
         {
-            this.HandlePrivateMessage?.Invoke(this, message);
+            this.HandleCommand?.Invoke(this, command);
         }
 
         private IEnumerable<TwitchBadge> SelectBadges(Badge[] badges)
@@ -61,20 +61,42 @@ namespace DMAssist.Twitchs
             return tagColor;
         }
 
-        private void OnPrivateMessage(object sender, PrivateMessageEventArgs e)
+        private void OnCommandRecieve(object sender, CommandEventArgs e)
         {
             var command = e.Command;
-            var tags = command.Tags;
-            var tuple = this.ParseMessage(e.Command);
 
-            var message = new PrivateMessage();
-            message.Badges.AddRange(this.SelectBadges(tags.Badeges));
-            message.DisplayName = tags.DisplayName;
-            message.ColorChat = tuple.ColorChat;
-            message.Components.AddRange(tuple.Components);
-            message.Color = this.PeekColor(tags.UserId, tags.Color);
+            if (command is CommandPrivateMessage cpm)
+            {
+                var tags = cpm.Tags;
+                var tuple = this.ParseMessage(cpm);
 
-            this.OnHandlePrivateMessage(message);
+                var message = new PrivateMessage();
+                message.Badges.AddRange(this.SelectBadges(tags.Badeges));
+                message.DisplayName = tags.DisplayName;
+                message.ColorChat = tuple.ColorChat;
+                message.Components.AddRange(tuple.Components);
+                message.Color = this.PeekColor(tags.UserId, tags.Color);
+                message.UserName = cpm.Sender.User;
+                message.Id = tags.Id;
+                this.OnHandleCommand(message);
+            }
+            else if (command is CommandClearChat clearChat)
+            {
+                var wc = new ClearChat();
+                wc.User = clearChat.User;
+                wc.BanDuration = clearChat.Tags.BanDuration;
+                this.OnHandleCommand(wc);
+            }
+            else if (command is CommandClearMessage clearMessage)
+            {
+                var tags = clearMessage.Tags;
+                var wc = new ClearMessage();
+                wc.Login = tags.Login;
+                wc.Message = tags.Message;
+                wc.TargetMessageid = tags.TargetMessageid;
+                this.OnHandleCommand(wc);
+            }
+
         }
 
         private List<Emote> ParseTwitchEmotes(TwitchChat.Commands.Emote[] tagEmotes)
@@ -267,7 +289,7 @@ namespace DMAssist.Twitchs
 
         protected virtual void Dispose(bool disposing)
         {
-            Program.Instance.TwitchChatManager.PrivateMessage -= this.OnPrivateMessage;
+            Program.Instance.TwitchChatManager.CommandRecieve -= this.OnCommandRecieve;
         }
 
         ~TwitchChatHandler()

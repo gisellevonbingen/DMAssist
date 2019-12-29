@@ -50,15 +50,20 @@ namespace DMAssist.Forms
             this.ResumeLayout(false);
 
             this.ClientSize = this.GetPreferredSize(new Size(800, 0));
-            Program.Instance.TwitchChatHandler.HandlePrivateMessage += this.OnTwitchChatManagerPrivateMessage;
+            Program.Instance.TwitchChatHandler.HandleCommand += this.OnTwitchChatManagerPrivateMessage;
         }
 
-        private void OnTwitchChatManagerPrivateMessage(object sender, PrivateMessage _e)
+        private void OnTwitchChatManagerPrivateMessage(object sender, WrappedCommand _e)
         {
-            this.BeginInvoke(new Action<PrivateMessage>((e) =>
+            if (_e is PrivateMessage pm)
             {
-                this.RecentChatView.Add(e);
-            }), _e);
+                this.BeginInvoke(new Action<WrappedCommand>((e) =>
+                {
+                    this.RecentChatView.Add(pm);
+                }), _e);
+
+            }
+
         }
 
         protected override void OnSizeChanged(EventArgs e)

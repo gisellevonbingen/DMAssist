@@ -9,13 +9,13 @@ using TwitchChat.Commands;
 
 namespace DMAssist.WebServers
 {
-    public class PacketChat : PacketBase
+    public class PacketCommand : PacketBase
     {
-        public PrivateMessage Message { get; set; }
+        public WrappedCommand Command { get; set; }
 
-        public PacketChat()
+        public PacketCommand()
         {
-            this.Message = new PrivateMessage();
+
         }
 
         public override void Read(JToken token)
@@ -25,9 +25,13 @@ namespace DMAssist.WebServers
 
         public override void Write(JToken token)
         {
-            var messageToken = new JObject();
-            this.Message.Write(messageToken);
-            token["Message"] = messageToken;
+            var command = this.Command;
+            token["CommandType"] = command.Type;
+
+            var commandToken = new JObject();
+            command.Write(commandToken);
+
+            token["Command"] = commandToken;
         }
 
     }

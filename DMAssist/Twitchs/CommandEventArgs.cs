@@ -7,11 +7,11 @@ using TwitchChat.Commands;
 
 namespace DMAssist.Twitchs
 {
-    public class PrivateMessageEventArgs : EventArgs
+    public class CommandEventArgs : EventArgs
     {
-        public CommandPrivateMessage Command { get; }
+        public Command Command { get; }
 
-        public PrivateMessageEventArgs(CommandPrivateMessage command)
+        public CommandEventArgs(Command command)
         {
             this.Command = command;
         }
